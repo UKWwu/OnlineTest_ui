@@ -3,7 +3,8 @@
 
     <div class="kj">
       <div class="dl">
-        <span style="color: #666666;font-weight:bold;font-size: 40px">企业在线笔试平台</span>
+        <i class="el-icon-s-home" style="font-size:45px"> </i>
+        <span style="color: #666666;font-weight:bold;font-size: 40px">在线笔试平台</span>
       </div>
       <div class="inp">
         <div class="djg"></div>
@@ -45,6 +46,7 @@
   }
 
   .dl {
+    color: goldenrod;
     float:left;
     margin-top: 10%;
     margin-left: 10%;
