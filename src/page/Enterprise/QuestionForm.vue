@@ -6,7 +6,7 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item @click.native="logOut">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span style="margin-right: 20%">{{userName}}</span>
@@ -14,8 +14,8 @@
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
           <el-aside width="20%" style="background-color: rgb(238, 241, 246);height: 100%">
-            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo" @open="handleOpen"
-                     @close="handleClose" :collapse="isCollapse" :default-active="this.$router.path"
+            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo"
+                     :default-active="this.$router.path"
                      router>
               <el-menu-item index="/Enterprise_question">
                 <i class="el-icon-menu"></i>
@@ -33,9 +33,13 @@
 
           </el-aside>
           <el-main style="width: 100%;height: 100%;background-color: white">
+            <el-page-header @back="goback" content="新增题目">
+            </el-page-header>
           </el-main>
         </el-container>
       </div>
+
+
     </el-container>
   </el-container>
 </template>
@@ -44,10 +48,24 @@
   import coo from '../cookie'
 
   export default {
-    name: "Enterprise_examination",
-
-    mounted() {
+    name: "QuestionForm",
+    datas() {
+      return {
+        userName: "",
+        userId:-1,
+      }
+    },
+    methods:{
+      goback(){
+        this.$router.push({name:"Enterprise_question"});
+      }
+    },
+    created() {
       this.userName = coo.getCookie("userName");
+      this.userId = this.$route.params.userId;
+    },
+    mounted(){
+      if(this.userId!=0){}
     }
   }
 </script>
@@ -57,9 +75,5 @@
     background-color: #B3C0D1;
     color: #333;
     line-height: 60px;
-  }
-
-  .el-aside {
-    color: #333;
   }
 </style>

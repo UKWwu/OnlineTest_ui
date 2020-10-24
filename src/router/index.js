@@ -5,12 +5,14 @@ import HomePage from '../page/HomePage'
 import AnswerOnline from '../page/AnswerOnline'
 import Administrators_business from '../page/Administrators/Business'
 import Administrators_question from '../page/Administrators/Question'
+import Administrators_QuestionForm from '../page/Enterprise/QuestionForm'
 import Administrators_system from '../page/Administrators/System'
 import Administrators_talent from '../page/Administrators/Talent'
 import Enterprise_talent from '../page/Enterprise/Talent'
 import Enterprise_question from '../page/Enterprise/Question'
 import Enterprise_examination from '../page/Enterprise/Examination'
 import ReleaseTest from '../page/Enterprise/ReleaseTest'
+import PersonalHome from '../page/Personal/PersonalHome'
 
 
 Vue.use(Router)
@@ -20,6 +22,11 @@ export default new Router({
   routes: [
     {
       path:'/',
+      name:'HomePage',
+      component:HomePage
+    },
+    {
+      path:'/HomePage',
       name:'HomePage',
       component:HomePage
     },
@@ -65,9 +72,21 @@ export default new Router({
     }
     ,
     {
+      path:'/PersonalHome',
+      name:'PersonalHome',
+      component:PersonalHome,
+    }
+    ,
+    {
       path:'/ReleaseTest',
       name:'ReleaseTest',
       component:ReleaseTest,
+    }
+    ,
+    {
+      path:'/Administrators_QuestionForm',
+      name:'Administrators_QuestionForm',
+      component:Administrators_QuestionForm,
     }
   ]
 })

@@ -6,9 +6,7 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span style="margin-right: 20%">管理员</span>
@@ -111,13 +109,15 @@
 </template>
 
 <script>
-
+  import coo from '../cookie'
   export default {
     components: {
     },
     name: "Administrators_talent",
     data() {
       return {
+        userType:"",
+        userName:"",
         isCollapse: false,
         tableData: [{
           name:"腾讯",
@@ -125,7 +125,7 @@
           remark:"这是腾讯公司",
           dizhi:"123456789@qq.com",
           fuzeren:"110",
-          xinxi:"管理员"
+          xinxi:"{{userName}}"
         },{
           name:"阿里巴巴",
           time:"2020-11-2",
@@ -158,6 +158,9 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       }
+    },
+    mounted() {
+      this.userName = coo.getCookie("userName");
     }
   }
 </script>

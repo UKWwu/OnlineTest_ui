@@ -6,12 +6,10 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span style="margin-right: 20%">腾讯</span>
+        <span style="margin-right: 20%">{{userName}}</span>
       </el-header>
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
@@ -34,7 +32,7 @@
             </el-menu>
 
           </el-aside>
-          <el-main  style="width: 100%;height: 100%;background-color: white">
+          <el-main style="width: 100%;height: 100%;background-color: white">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item>首页</el-breadcrumb-item>
               <el-breadcrumb-item>人才库管理</el-breadcrumb-item>
@@ -113,36 +111,43 @@
 </template>
 
 <script>
-    export default {
-        name: "Enterprise_talent",
-        data(){
-          return{
-            tableData: [{
-              name:"张三",
-              time:"70",
-              remark:"",
-              dizhi:"重庆理工大学",
-              fuzeren:"本科",
-              xinxi:"男"
-            },{
-              name:"李四",
-              time:"80",
-              remark:"",
-              dizhi:"重庆理工大学",
-              fuzeren:"本科",
-              xinxi:"男"
-            },{
-              name:"小青蛙",
-              time:"60",
-              remark:"",
-              dizhi:"重庆理工大学",
-              fuzeren:"本科",
-              xinxi:"女"
-            }
-            ],
-          }
-        },
+  import coo from '../cookie'
+
+  export default {
+    name: "Enterprise_talent",
+    data() {
+      return {
+        userType: "",
+        userName: "",
+        tableData: [{
+          name: "张三",
+          time: "70",
+          remark: "",
+          dizhi: "重庆理工大学",
+          fuzeren: "本科",
+          xinxi: "男"
+        }, {
+          name: "李四",
+          time: "80",
+          remark: "",
+          dizhi: "重庆理工大学",
+          fuzeren: "本科",
+          xinxi: "男"
+        }, {
+          name: "小青蛙",
+          time: "60",
+          remark: "",
+          dizhi: "重庆理工大学",
+          fuzeren: "本科",
+          xinxi: "女"
+        }
+        ],
+      }
+    },
+    mounted() {
+      this.userName = coo.getCookie("userName");
     }
+  }
 </script>
 
 <style scoped>

@@ -6,12 +6,10 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span style="margin-right: 20%">腾讯</span>
+        <span style="margin-right: 20%">{{userName}}</span>
       </el-header>
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
@@ -34,8 +32,8 @@
             </el-menu>
 
           </el-aside>
-          <el-main  style="width: 100%;height: 100%;background-color: white">
-            <el-page-header @back="" content="新建笔试">
+          <el-main style="width: 100%;height: 100%;background-color: white">
+            <el-page-header @back="goback" content="新建笔试">
             </el-page-header>
 
             <div style="margin-top: 5%">
@@ -52,7 +50,8 @@
                   </el-form-item>
                   <el-form-item label="笔试时间">
                     <el-col :span="11">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                      <el-date-picker type="date" placeholder="选择日期" v-model="form.date1"
+                                      style="width: 100%;"></el-date-picker>
                     </el-col>
                   </el-form-item>
                   <el-form-item label="是否启动" prop="form">
@@ -80,10 +79,12 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="题目数量">
-                    <el-input-number v-model="form2.number" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+                    <el-input-number v-model="form2.number" @change="handleChange" :min="1" :max="10"
+                                     label="描述文字"></el-input-number>
                   </el-form-item>
                   <el-form-item label="考试时间">
-                    <el-time-picker  arrow-control placeholder="选择时间" v-model="form2.time" style="width: 35%;"></el-time-picker>
+                    <el-time-picker arrow-control placeholder="选择时间" v-model="form2.time"
+                                    style="width: 35%;"></el-time-picker>
                   </el-form-item>
 
                 </el-form>
@@ -118,56 +119,65 @@
 </template>
 
 <script>
-    export default {
-        name: "Enterprise_examination",
-        data(){
-          const generateData = _ => {
-            const data = [];
-            const cities = ['张三', '李四', '小青蛙'];
-            const pinyin = ['zhangsan', 'lisi', 'xiaoqingwa'];
-            cities.forEach((city, index) => {
-              data.push({
-                label: city,
-                key: index,
-                pinyin: pinyin[index]
-              });
-            });
-            return data;
-          };
-          return{
-            data: generateData(),
-            value: [],
-            filterMethod(query, item) {
-              return item.pinyin.indexOf(query) > -1;
-            },
-            active : 1,
-            form: {
-              name: '',
-              region: '',
-              date1: '',
-              date2: '',
-              delivery: false,
-              type: [],
-              resource: '',
-              desc: ''
-            },
-            form2: {
-              type: '',
-              time: '',
-              number: '',
-              source:''
-            },
-          }
+  import coo from '../cookie'
+  export default {
+    name: "Enterprise_examination",
+    data() {
+      const generateData = _ => {
+        const data = [];
+        const cities = ['张三', '李四', '小青蛙'];
+        const pinyin = ['zhangsan', 'lisi', 'xiaoqingwa'];
+        cities.forEach((city, index) => {
+          data.push({
+            label: city,
+            key: index,
+            pinyin: pinyin[index]
+          });
+        });
+        return data;
+      };
+      return {
+        userType:"",
+        userName:"",
+        data: generateData(),
+        value: [],
+        filterMethod(query, item) {
+          return item.pinyin.indexOf(query) > -1;
         },
-        methods:{
-          next() {
-            if (this.active++ > 2) this.active = 1;
-          },
-          pre() {
-            if (this.active-- < 1) this.active = 3;
-          }
-        }
+        active: 1,
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        form2: {
+          type: '',
+          time: '',
+          number: '',
+          source: ''
+        },
+      }
+    },
+    methods: {
+      next() {
+        if (this.active++ > 2) this.active = 1;
+      },
+      pre() {
+        if (this.active-- < 1) this.active = 3;
+      },
+      goback() {
+        this.$router.push({name: 'Enterprise_examination', params: {userType: this.userType, userName: this.userName}})
+      }
+    },
+    mounted() {
+      this.userName = coo.getCookie("userName");
     }
+  }
 </script>
 
 <style scoped>

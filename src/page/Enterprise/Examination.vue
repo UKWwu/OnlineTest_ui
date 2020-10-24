@@ -6,12 +6,10 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span style="margin-right: 20%">腾讯</span>
+        <span style="margin-right: 20%">{{userName}}</span>
       </el-header>
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
@@ -32,7 +30,6 @@
                 <span slot="title">人才库管理</span>
               </el-menu-item>
             </el-menu>
-
           </el-aside>
           <el-main  style="width: 100%;height: 100%;background-color: white">
             <el-breadcrumb separator="/">
@@ -40,7 +37,7 @@
               <el-breadcrumb-item>笔试管理</el-breadcrumb-item>
             </el-breadcrumb>
 
-            <el-button type="primary" icon="el-icon-plus" style="width:50%;margin-top:15px;margin-left: 20%;height: 10%;font-size: 30px">发布新笔试</el-button>
+            <el-button type="primary" icon="el-icon-plus" style="width:50%;margin-top:15px;margin-left: 20%;height: 10%;font-size: 30px" @click.native = "addNewTest">发布新笔试</el-button>
 
             <el-table
               :data="tableData"
@@ -50,7 +47,7 @@
                 fixed
                 prop="name"
                 label="笔试名称"
-                width="200">
+                width="100">
               </el-table-column>
               <el-table-column
                 fixed
@@ -59,9 +56,15 @@
                 width="200">
               </el-table-column>
               <el-table-column
+                fixed
+                prop="status"
+                label="笔试状态"
+                width="200">
+              </el-table-column>
+              <el-table-column
                 fixed="right"
                 label="操作"
-                width="300">
+                width="200">
                 <template slot-scope="scope">
                   <el-button type="primary">查看笔试结果</el-button>
                 </template>
@@ -84,21 +87,35 @@
 </template>
 
 <script>
+  import coo from '../cookie'
     export default {
         name: "Enterprise_examination",
       data(){
           return{
+            userType:"",
+            userName:"",
             tableData: [{
               name:"第一次笔试",
               time:2020-1-1,
+              status:"已结束",
             },{
               name:"第二次笔试",
               time:2020-3-1,
+              status:"已结束",
             },{
               name:"第三次笔试",
               time:2020-5-1,
+              status:"已结束",
             },],
           }
+      },
+      methods:{
+        addNewTest(){
+          this.$router.push({name:'ReleaseTest',params:{userType:this.userType,userName:this.userName}})
+        }
+      },
+      mounted() {
+        this.userName = coo.getCookie("userName");
       }
     }
 </script>

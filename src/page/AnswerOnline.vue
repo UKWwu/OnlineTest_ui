@@ -22,13 +22,13 @@
                 <div>{{i+1}}、{{item.question}}</div>
                 <li v-for="(son,index) in item.answer" :key="index">
                   <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
-                  <el-radio
-                    style="margin-left: 5%;margin-bottom: 2%"
-                    v-model="radio[i]"
-                    :label="son.value"
-                    :name="son.name"
-                    @change="getIputValue(i)"
-                  ></el-radio>
+                    <el-radio
+                      style="margin-left: 5%;margin-bottom: 2%"
+                      v-model="radio[i]"
+                      :label="son.value"
+                      :name="son.name"
+                      @change="getIputValue(i)"
+                    ></el-radio>
                   </div>
                 </li>
               </div>
@@ -53,11 +53,13 @@
     name: "AnswerOnline",
     data() {
       return {
+        userType: "",
+        userName: "",
         day: 0,
         hr: 0,
         min: 0,
         sec: 0,
-        choose:'2',
+        choose: '2',
         question: "为初始化其成员变量，每个类都定义的方法是（）",
         examinationData: [
           {
@@ -128,10 +130,10 @@
       };
     },
     methods: {
-      pre(){
+      pre() {
         this.choose--;
       },
-      next(){
+      next() {
         this.choose++;
       },
       //答题
@@ -166,7 +168,9 @@
       }
     },
     mounted() {
-      this.countdown()
+      this.countdown();
+      this.userName = this.$route.params.userName;
+      this.userType = this.$route.params.userType;
     }
   }
 </script>

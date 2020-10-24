@@ -6,12 +6,10 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item  @click.native = "logOut">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span style="margin-right: 20%">管理员</span>
+        <span style="margin-right: 20%">{{userName}}</span>
       </el-header>
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
@@ -80,13 +78,15 @@
 </template>
 
 <script>
-
+  import coo from '../cookie'
   export default {
     components: {},
     name: "Administrators_business",
     data() {
       return {
         isCollapse: false,
+        userType:"",
+        userName:"",
         tableData: [{
           name:"腾讯",
           time:"2020-11-2",
@@ -124,12 +124,19 @@
       }
     },
     methods: {
+      logOut(){
+        this.coo.clearCookie();
+        this.$router.push({name: '', params: {}});
+      },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       }
+    },
+    mounted() {
+      this.userName = coo.getCookie("userName");
     }
   }
 </script>
