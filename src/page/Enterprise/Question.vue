@@ -87,7 +87,7 @@
                   width="150">
                   <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                    <el-button type="text" size="small">编辑</el-button>
+                    <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
                     <el-button type="text" size="small" style="color: red" @click="deleteQuestion(scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
@@ -122,8 +122,11 @@
       }
     },
     methods:{
+      update(question){
+        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:question.id}})
+      },
       addQustion(){
-        this.$router.push({name:'Administrators_QuestionForm',params:{userId:-1}});
+        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:-1}});
       },
       deleteQuestion(question){
         this.$confirm('此操作将永久删除, 是否继续?', '提示', {
