@@ -37,37 +37,39 @@
             </el-page-header>
             <el-page-header @back="goback" content="编辑题目" v-if="this.formType == 'update'">
             </el-page-header>
+            <el-page-header @back="goback" content="查看题目" v-if="this.formType == 'display'">
+            </el-page-header>
 
-            <el-form :label-position="left" :model="question" label-width="80px" :rules="rules" ref="question"
-                     style="margin-left: 15%;width: 70%;margin-top: 5%" size="small">
+            <el-form :model="question" label-width="80px" :rules="rules" ref="question"
+                     style="margin-left: 15%;width: 70%;margin-top: 5%" size="small" v-bind:disabled="false">
               <el-form-item label="问题名称" prop="name">
-                <el-input v-model="question.name"></el-input>
+                <el-input v-model="question.name" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
               <el-form-item label="问题类型" prop="problemType">
-                <el-input v-model="question.problemType"></el-input>
+                <el-input v-model="question.problemType" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
               <el-form-item label="问题标题" prop="title">
-                <el-input v-model="question.title" type="textarea"
+                <el-input v-model="question.title" type="textarea" :readonly="readonly ? 'readonly':false"
                           :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="选项A" prop="contentA">
-                <el-input v-model="question.contentA" type="textarea"
+                <el-input v-model="question.contentA" type="textarea" :readonly="readonly ? 'readonly':false"
                           :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="选项B" prop="contentB">
-                <el-input v-model="question.contentB" type="textarea"
+                <el-input v-model="question.contentB" type="textarea" :readonly="readonly ? 'readonly':false"
                           :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="选项C" prop="contentC">
-                <el-input v-model="question.contentC" type="textarea"
+                <el-input v-model="question.contentC" type="textarea" :readonly="readonly ? 'readonly':false"
                           :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="选项D" prop="contentD">
-                <el-input v-model="question.contentD" type="textarea"
+                <el-input v-model="question.contentD" type="textarea" :readonly="readonly ? 'readonly':false"
                           :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="正确选项" prop="answer">
-                <el-input v-model="question.answer"></el-input>
+                <el-input v-model="question.answer" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
               <div style="margin-left: 45%">
                 <el-button type="primary" v-if="formType == 'add'" @click.native="addQuestion">新建</el-button>
@@ -90,6 +92,7 @@
     name: "QuestionForm",
     data() {
       return {
+        readonly:false,
         userName: "",
         userId: -1,
         formType: "add",
@@ -127,6 +130,9 @@
           ],
           contentD: [
             {required: true, message: '请输入问题选项D', trigger: 'blur'}
+          ],
+          answer: [
+            {required: true, message: '请输入正确选项', trigger: 'blur'}
           ]
         }
       }
@@ -148,6 +154,16 @@
         })
       },
       updateQuestion() {
+        this.question.unitName = coo.getCookie("userName");
+        this.question.content = this.question.contentA+"&|&"+this.question.contentB+"&|&"+this.question.contentC+"&|&"+this.question.contentD;
+        this.$axios.post(
+          'http://localhost:8081/EnterpriseQuestion/updateQuestion', this.question)
+          .then((res) => {
+            var list = res.data;
+            this.$router.push({name:"Enterprise_question"});
+          }).catch((err) => {
+          console.log(err)
+        })
       },
       findQuestionById(id){
         let problem = {
@@ -156,20 +172,30 @@
         this.$axios.post(
           'http://localhost:8081/EnterpriseQuestion/findQuestionById', problem)
           .then((res) => {
-            this.question = res.date;
+            this.question = res.data;
+            this.getContent(this.question.content);
           }).catch((err) => {
           console.log(err)
         })
+      },
+      getContent(content){
+        let contentList = content.split("&|&");
+        this.question.contentA = contentList[0];
+        this.question.contentB = contentList[1];
+        this.question.contentC = contentList[2];
+        this.question.contentD = contentList[3];
       }
     },
     created() {
       this.userName = coo.getCookie("userName");
       this.questionId = this.$route.params.questionId;
-      if (this.questionId != -1) {
-        // this.findQuestionById(this.questionId);
-        this.formType = "update";
-      } else {
-        this.formType = "add";
+      this.formType = this.$route.params.formType;
+      if (this.formType == "update") {
+        this.findQuestionById(this.questionId);
+      } else if(this.formType == "display"){
+        this.findQuestionById(this.questionId);
+        this.readonly = true;
+        this.rules = {}
       }
     },
     mounted() {

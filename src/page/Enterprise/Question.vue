@@ -40,8 +40,8 @@
 
             <div style="margin-top: 5%">
               <div style="width: 100%;margin-bottom: 2%">
-                <el-input placeholder="请输入关键字搜索" style="width: 20%"></el-input>
-                <el-button type="primary" icon="el-icon-search">搜索</el-button>
+                <el-input v-model="findKey" placeholder="请输入关键字搜索" style="width: 20%"></el-input>
+                <el-button type="primary" icon="el-icon-search" @click ="findQuestionByKey">搜索</el-button>
                 <el-button type="primary" style="float: right" @click="addQustion">
                   新增企业题目
                 </el-button>
@@ -86,7 +86,7 @@
                   label="操作"
                   width="150">
                   <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                    <el-button @click="display(scope.row)" type="text" size="small">查看</el-button>
                     <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
                     <el-button type="text" size="small" style="color: red" @click="deleteQuestion(scope.row)">删除</el-button>
                   </template>
@@ -94,9 +94,14 @@
               </el-table>
               <div style="width: 100%;text-align: center;margin-top: 5%;">
                 <el-pagination
+                  v-if="pageDisplay"
                   background
-                  layout="prev, pager, next"
-                  :total="10">
+                  :total= number
+                  @current-change="handleCurrentChange"
+                  @size-change="handleSizeChange"
+                  :page-sizes="[10, 20, 30, 40]"
+                  :page-size="10"
+                  layout="total, sizes, prev, pager, next, jumper">
                 </el-pagination>
               </div>
             </div>
@@ -115,18 +120,55 @@
     name: "Enterprise_question",
     data() {
       return {
+        number:0,
+        pageDisplay:true,
         userType:"",
         userName:"",
         tableData: [],
-        req:{},
+        findKey:"",
+        req:{
+          userName:"",
+          page:1,
+          number:10
+        },
       }
     },
     methods:{
+      findQuestionByKey(){
+        this.req.page =1;
+        if(this.findKey != "")
+        this.pageDisplay = false;
+        else{
+          this.pageDisplay = true;
+        }
+        this.req.remark = this.findKey;
+        this.$axios.post(
+          'http://localhost:8081/EnterpriseQuestion/findQuestionByKey',this.req)
+          .then((res) => {
+            this.tableData = res.data;
+          }).catch((err) => {
+          console.log(err)
+        })
+      },
+      handleSizeChange(val){
+        this.req.page = 1;
+        this.req.number = val;
+        this.findQuestionByPage();
+      },
+      handleCurrentChange(val){
+        this.req.page = val;
+        this.findQuestionByPage();
+      },
+      display(question){
+        let questionId = question.id;
+        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:questionId,formType:"display"}})
+      },
       update(question){
-        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:question.id}})
+        let questionId = question.id;
+        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:questionId,formType:"update"}})
       },
       addQustion(){
-        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:-1}});
+        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:-1,formType:"add"}});
       },
       deleteQuestion(question){
         this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -161,12 +203,22 @@
         this.$router.push({name: 'HomePage', params: {}});
       },
       findQuestionByPage(){
-        this.req.page = 1;
-        this.req.number = 10;
         this.$axios.post(
-          'http://localhost:8081/EnterpriseQuestion/findByPage', this.req)
+          'http://localhost:8081/EnterpriseQuestion/findByPage',this.req)
           .then((res) => {
             this.tableData = res.data;
+          }).catch((err) => {
+          console.log(err)
+        })
+      },
+      findQuestionNumber(){
+        let temp ={
+          userName:this.userName
+        };
+        this.$axios.post(
+          'http://localhost:8081/EnterpriseQuestion/findQuestionNumber',temp)
+          .then((res) => {
+            this.number = res.data;
           }).catch((err) => {
           console.log(err)
         })
@@ -174,7 +226,9 @@
     },
     mounted() {
       this.userName = coo.getCookie("userName");
+      this.req.userName = coo.getCookie("userName");
       this.findQuestionByPage();
+      this.findQuestionNumber();
     }
   }
 </script>

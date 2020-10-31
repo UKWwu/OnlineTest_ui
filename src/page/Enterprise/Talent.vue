@@ -14,8 +14,8 @@
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
           <el-aside width="20%" style="background-color: rgb(238, 241, 246);height: 100%">
-            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo" @open="handleOpen"
-                     @close="handleClose" :collapse="isCollapse" :default-active="this.$router.path"
+            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo"
+                     :default-active="this.$router.path"
                      router>
               <el-menu-item index="/Enterprise_question">
                 <i class="el-icon-menu"></i>
@@ -39,7 +39,7 @@
             </el-breadcrumb>
 
             <div style="width: 100%;margin-top: 5%;margin-bottom: 5%">
-              <el-input v-model="input" placeholder="请输入关键字搜索" style="width: 20%"></el-input>
+              <el-input placeholder="请输入关键字搜索" style="width: 20%"></el-input>
               <el-button type="primary" icon="el-icon-search">搜索</el-button>
               <el-button type="primary" style="float: right">
                 新增候选人
@@ -59,22 +59,22 @@
                 width="150">
               </el-table-column>
               <el-table-column
-                prop="xinxi"
+                prop="sex"
                 label="性别"
                 width="120">
               </el-table-column>
               <el-table-column
-                prop="fuzeren"
+                prop="education"
                 label="学历"
                 width="120">
               </el-table-column>
               <el-table-column
-                prop="dizhi"
+                prop="school"
                 label="学校"
                 width="120">
               </el-table-column>
               <el-table-column
-                prop="time"
+                prop="grade"
                 label="笔试成绩"
                 width="120">
               </el-table-column>
@@ -88,7 +88,7 @@
                 label="操作"
                 width="150">
                 <template slot-scope="scope">
-                  <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                  <el-button @click="" type="text" size="small">查看</el-button>
                   <el-button type="text" size="small">编辑</el-button>
                   <el-button type="text" size="small" style="color: red">删除</el-button>
                 </template>
@@ -97,9 +97,10 @@
             <div style="width: 100%;text-align: center;margin-top: 5%;">
               <el-pagination
                 background
-                layout="prev, pager, next"
-                :total="10">
-              </el-pagination>
+                :total=number
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="10"
+                layout="total, sizes, prev, pager, next, jumper"></el-pagination>
             </div>
           </el-main>
         </el-container>
@@ -112,40 +113,32 @@
 
 <script>
   import coo from '../cookie'
+  import requet from '../request'
 
   export default {
     name: "Enterprise_talent",
     data() {
       return {
         userType: "",
+        number: 0,
         userName: "",
-        tableData: [{
-          name: "张三",
-          time: "70",
-          remark: "",
-          dizhi: "重庆理工大学",
-          fuzeren: "本科",
-          xinxi: "男"
-        }, {
-          name: "李四",
-          time: "80",
-          remark: "",
-          dizhi: "重庆理工大学",
-          fuzeren: "本科",
-          xinxi: "男"
-        }, {
-          name: "小青蛙",
-          time: "60",
-          remark: "",
-          dizhi: "重庆理工大学",
-          fuzeren: "本科",
-          xinxi: "女"
-        }
-        ],
+        tableData: [],
+        req:{
+          userName:"",
+          page:1,
+          number:10
+        },
+      }
+    },
+    methods:{
+      findAllTalent(){
+        requet.postRequest( 'http://localhost:8081/EnterpriseTalent/findTalentList',this.req);
       }
     },
     mounted() {
       this.userName = coo.getCookie("userName");
+      this.req.userName = coo.getCookie("userName");
+      this.findAllTalent();
     }
   }
 </script>
