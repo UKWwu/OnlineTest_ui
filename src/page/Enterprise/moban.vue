@@ -6,7 +6,7 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 1px;font-size: 20px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item @click.native = "logOut">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span style="margin-right: 20%">{{userName}}</span>
@@ -14,8 +14,7 @@
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
           <el-aside width="20%" style="background-color: rgb(238, 241, 246);height: 100%">
-            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo" @open="handleOpen"
-                     @close="handleClose" :collapse="isCollapse" :default-active="this.$router.path"
+            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo" :default-active="this.$router.path"
                      router>
               <el-menu-item index="/Enterprise_question">
                 <i class="el-icon-menu"></i>
@@ -45,7 +44,17 @@
 
   export default {
     name: "Enterprise_examination",
-
+    data(){
+      return{
+        userName:""
+      }
+    },
+    methods:{
+      logOut(){
+        coo.clearCookie();
+        this.$router.push({name: 'HomePage', params: {}});
+      },
+    },
     mounted() {
       this.userName = coo.getCookie("userName");
     }

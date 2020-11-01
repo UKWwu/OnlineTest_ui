@@ -173,17 +173,13 @@
           'http://localhost:8081/EnterpriseQuestion/findQuestionById', problem)
           .then((res) => {
             this.question = res.data;
-            this.getContent(this.question.content);
           }).catch((err) => {
           console.log(err)
         })
       },
-      getContent(content){
-        let contentList = content.split("&|&");
-        this.question.contentA = contentList[0];
-        this.question.contentB = contentList[1];
-        this.question.contentC = contentList[2];
-        this.question.contentD = contentList[3];
+      logOut(){
+        coo.clearCookie();
+        this.$router.push({name: 'HomePage', params: {}});
       }
     },
     created() {

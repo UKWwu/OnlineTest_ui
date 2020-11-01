@@ -9,10 +9,12 @@ import Administrators_QuestionForm from '../page/Enterprise/QuestionForm'
 import Administrators_system from '../page/Administrators/System'
 import Administrators_talent from '../page/Administrators/Talent'
 import Enterprise_talent from '../page/Enterprise/Talent'
+import Enterprise_TalentForm from '../page/Enterprise/TalentForm'
 import Enterprise_question from '../page/Enterprise/Question'
 import Enterprise_examination from '../page/Enterprise/Examination'
 import ReleaseTest from '../page/Enterprise/ReleaseTest'
 import PersonalHome from '../page/Personal/PersonalHome'
+import DispalyGrade from '../page/Enterprise/DisplayGrade'
 
 
 Vue.use(Router)
@@ -72,6 +74,12 @@ export default new Router({
     }
     ,
     {
+      path:'/Enterprise_TalentForm',
+      name:'Enterprise_TalentForm',
+      component:Enterprise_TalentForm,
+    }
+    ,
+    {
       path:'/PersonalHome',
       name:'PersonalHome',
       component:PersonalHome,
@@ -87,6 +95,12 @@ export default new Router({
       path:'/Administrators_QuestionForm',
       name:'Administrators_QuestionForm',
       component:Administrators_QuestionForm,
+    }
+    ,
+    {
+      path:'/DispalyGrade',
+      name:'DispalyGrade',
+      component:DispalyGrade,
     }
   ]
 })

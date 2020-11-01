@@ -13,7 +13,7 @@ export default ({
     axios.post(
       http,body)
       .then((res) => {
-        this.tableData = res.data;
+        return res.data;
       }).catch((err) => {
       console.log(err)
     })

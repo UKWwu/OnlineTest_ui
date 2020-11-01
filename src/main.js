@@ -10,10 +10,13 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 
+var echarts = require('echarts');
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   coo,
+  echarts,
   render: h => h(App)
 })

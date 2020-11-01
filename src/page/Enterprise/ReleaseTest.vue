@@ -14,8 +14,7 @@
       <div style="width: 60%;margin-left: 20%;height: 100%">
         <el-container style="height: 100%">
           <el-aside width="20%" style="background-color: rgb(238, 241, 246);height: 100%">
-            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo" @open="handleOpen"
-                     @close="handleClose" :collapse="isCollapse" :default-active="this.$router.path"
+            <el-menu default-active="1-4-1" style="height: 100%" class="el-menu-vertical-demo":default-active="this.$router.path"
                      router>
               <el-menu-item index="/Enterprise_question">
                 <i class="el-icon-menu"></i>
@@ -98,7 +97,7 @@
                   filterable
                   :titles="['候选人', '考试人员']"
                   :filter-method="filterMethod"
-                  filter-placeholder="请输入候选人拼音"
+                  filter-placeholder="请输入候选人 "
                   v-model="value"
                   :data="data">
                 </el-transfer>
@@ -126,12 +125,10 @@
       const generateData = _ => {
         const data = [];
         const cities = ['张三', '李四', '小青蛙'];
-        const pinyin = ['zhangsan', 'lisi', 'xiaoqingwa'];
         cities.forEach((city, index) => {
           data.push({
             label: city,
             key: index,
-            pinyin: pinyin[index]
           });
         });
         return data;
@@ -142,7 +139,7 @@
         data: generateData(),
         value: [],
         filterMethod(query, item) {
-          return item.pinyin.indexOf(query) > -1;
+          return item.label.indexOf(query) > -1;
         },
         active: 1,
         form: {
