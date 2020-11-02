@@ -92,7 +92,7 @@
           remark:"这是腾讯公司",
           dizhi:"深圳",
           fuzeren:"马化腾",
-          src:require('../../assets/腾讯.jpg'),
+          src:require('../../assets/img/腾讯.jpg'),
           xinxi:"课程设计专用"
         },{
           name:"阿里巴巴",
@@ -100,7 +100,7 @@
           remark:"这是阿里巴巴",
           dizhi:"杭州",
           fuzeren:"马云",
-          src:require('../../assets/阿里巴巴.jpg'),
+          src:require('../../assets/img/阿里巴巴.jpg'),
           xinxi:"课程设计专用"
         },{
           name:"360",
@@ -108,14 +108,14 @@
           remark:"这是360",
           dizhi:"深圳",
           fuzeren:"小青蛙",
-          src:require('../../assets/360.jpg'),
+          src:require('../../assets/img/360.jpg'),
           xinxi:"课程设计专用"
         },{
           name:"微店",
           time:"2020-11-2",
           remark:"这是微店公司",
           dizhi:"杭州",
-          src:require('../../assets/微店.jpg'),
+          src:require('../../assets/img/微店.jpg'),
           fuzeren:"张鑫",
           xinxi:"课程设计专用"
         }

@@ -75,7 +75,7 @@
               if (list.userType == "2")
                 this.$router.push({name: 'Enterprise_question', params: {}})
               if (list.userType == "3")
-                this.$router.push({name: 'personalHome', params: {}})
+                this.$router.push({name: 'AnswerOnline', params: {userId:list.id}})
             }
           }).catch((err) => {
           console.log(err)
@@ -93,7 +93,7 @@
 
   #app {
     text-align: center;
-    background-image: url("../assets/proxy.jpg");
+    background-image: url("../assets/img/proxy.jpg");
     display: block;
     width: 1920px;
     height: 937px;
