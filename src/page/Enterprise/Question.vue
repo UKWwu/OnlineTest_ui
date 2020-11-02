@@ -161,14 +161,14 @@
       },
       display(question){
         let questionId = question.id;
-        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:questionId,formType:"display"}})
+        this.$router.push({name:'QuestionForm',params:{questionId:questionId,formType:"display"}})
       },
       update(question){
         let questionId = question.id;
-        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:questionId,formType:"update"}})
+        this.$router.push({name:'QuestionForm',params:{questionId:questionId,formType:"update"}})
       },
       addQustion(){
-        this.$router.push({name:'Administrators_QuestionForm',params:{questionId:-1,formType:"add"}});
+        this.$router.push({name:'QuestionForm',params:{questionId:-1,formType:"add"}});
       },
       deleteQuestion(question){
         this.$confirm('此操作将永久删除, 是否继续?', '提示', {

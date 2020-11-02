@@ -5,7 +5,8 @@ import HomePage from '../page/HomePage'
 import AnswerOnline from '../page/AnswerOnline'
 import Administrators_business from '../page/Administrators/Business'
 import Administrators_question from '../page/Administrators/Question'
-import Administrators_QuestionForm from '../page/Enterprise/QuestionForm'
+import QuestionForm from '../page/Enterprise/QuestionForm'
+import Administrators_QuestionForm from '../page/Administrators/QuestionForm'
 import Administrators_system from '../page/Administrators/System'
 import Administrators_talent from '../page/Administrators/Talent'
 import Enterprise_talent from '../page/Enterprise/Talent'
@@ -15,6 +16,7 @@ import Enterprise_examination from '../page/Enterprise/Examination'
 import ReleaseTest from '../page/Enterprise/ReleaseTest'
 import PersonalHome from '../page/Personal/PersonalHome'
 import DispalyGrade from '../page/Enterprise/DisplayGrade'
+import UserForm from '../page/Administrators/UserForm'
 
 
 Vue.use(Router)
@@ -95,12 +97,22 @@ export default new Router({
       path:'/Administrators_QuestionForm',
       name:'Administrators_QuestionForm',
       component:Administrators_QuestionForm,
+    } ,
+    {
+      path:'/QuestionForm',
+      name:'QuestionForm',
+      component:QuestionForm,
     }
     ,
     {
       path:'/DispalyGrade',
       name:'DispalyGrade',
       component:DispalyGrade,
+    },
+    {
+      path:'/UserForm',
+      name:'UserForm',
+      component:UserForm,
     }
   ]
 })
