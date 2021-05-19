@@ -70,12 +70,16 @@
               this.passworderrow = false;
             } else {
               coo.setCookie(list.userAccount, list.userName,list.userType, 365);
+              //1 管理员
+              //2 企业
+              //3 用户
+              //4 临时用户且过期
               if (list.userType == "1")
                 this.$router.push({name: 'Administrators_business', params: {}})
               if (list.userType == "2")
                 this.$router.push({name: 'Enterprise_question', params: {}})
               if (list.userType == "3")
-                this.$router.push({name: 'AnswerOnline', params: {userId:list.id}})
+                this.$router.push({name: 'AnswerHomePage', params: {userId:list.id}})
             }
           }).catch((err) => {
           console.log(err)
@@ -94,9 +98,13 @@
   #app {
     text-align: center;
     background-image: url("../assets/img/proxy.jpg");
-    display: block;
-    width: 1920px;
-    height: 937px;
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #cccccc;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100vh;
   }
 
   .kj {
@@ -119,7 +127,7 @@
     margin-top: 20%;
     width: 30%;
     height: 40%;
-    background-color: rgba(240, 248, 255, 0.2);
+    background-color: rgba(240, 248, 255, 0.4);
   }
 
   .font-dl {

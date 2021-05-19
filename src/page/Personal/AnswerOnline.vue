@@ -6,8 +6,25 @@
       </div>
     </div>
     <div id="js">
+      <div class="videoContent">
+        <video src="" id="videoDemo" class="video"></video>
+      </div>
       <div class="jsq">
         <i class="el-icon-time" style="margin-top: 20px"></i>
+      </div>
+    </div>
+    <div class="content">
+      <div class="context" style="background-color: black;">
+        <button class="next" onclick="next()">下一个</button>
+      </div>
+      <div class="context" style="background-color: yellow;">
+        <button class="next" onclick="next()">下一个</button>
+      </div>
+      <div class="context" style="background-color: red;">
+        <button class="next" onclick="next()">下一个</button>
+      </div>
+      <div class="context" style="background-color: blue;">
+        <button class="next" onclick="next()">下一个</button>
       </div>
     </div>
     <div class="content">
@@ -74,12 +91,11 @@
 </template>
 
 <script>
-  import coo from '../page/cookie'
+  import coo from '../cookie'
 
   export default {
     name: "AnswerOnline",
     data() {
-      var timeContent="";
       return {
         userId: "",
         userType: "",
@@ -89,7 +105,7 @@
         sec: 0,
         log: "0",
         choose: "0",
-        timeContent:"",
+        timeContent: "",
         examinationData: [],
         allRadio: [],//单选答案集合数据
         radio: "", //单选答案
@@ -97,21 +113,21 @@
       };
     },
     methods: {
-      set:()=>{
-        var s =0;
-        var m =30;
+      set: () => {
+        var s = 0;
+        var m = 30;
         var timer = setInterval(
           function () {
-            if (s==0 &&m == 0){
+            if (s == 0 && m == 0) {
               clearInterval(timer)
               this.submit()
-            }else{
-              if(s ==0){
-                m --;
+            } else {
+              if (s == 0) {
+                m--;
                 s = 59;
               }
               s--;
-              this.timeContent = m+":"+s;
+              this.timeContent = m + ":" + s;
               console.log(this.timeContent)
             }
           }, 1000);
@@ -218,16 +234,28 @@
             for (let i = 0; i < this.examinationData.length; i++) {
               this.trueRadio[i] = this.examinationData[i].answer;
             }
+            console.log(this.examinationData);
           }).catch((err) => {
           console.log(err)
         })
       },
-      remind(){
+      remind() {
         this.$confirm('该场笔试时长半小时，后台统计时间，时间到达时强制交卷，请注意把控时间！', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {})
+        }).then(() => {
+        })
+      },
+      next() {
+        if (log != dom.length - 1) {
+          dom[log++].style.display = "none";
+          dom[log].style.display = "flex";
+        } else {
+          dom[log].style.display = "none";
+          log = 0;
+          dom[log].style.display = "flex";
+        }
       }
     }
     ,
@@ -238,27 +266,32 @@
       this.findQuestionByExam();
       this.findTime();
       this.set();
-      this.remind()
+      this.remind();
+
+      //设置捕获摄像头
+      let video = document.getElementById("videoDemo");
+      navigator.mediaDevices.getUserMedia({
+        video: true
+      }).then(res => {
+        video.srcObject = res;
+        video.play();
+      })
+
+      //设置初始页面
+      let log = 0;
+      let dom = document.getElementsByClassName("context");
+      console.log(dom);
+      dom[0].style.display = "flex";
     }
   }
 </script>
+
 
 <style scoped>
   html, body {
     padding: 0px;
     margin: 0px;
     background-color: antiquewhite;
-  }
-
-  .jsq {
-    width: 15%;
-    height: 70px;
-    float: right;
-    background-color: #ffc445;
-    color: white;
-    font-size: 30px;
-    text-align: center;
-    margin-right: 30%
   }
 
   .top {
@@ -277,6 +310,27 @@
     height: 100%;
   }
 
+  .jsq {
+    width: 15%;
+    height: 70px;
+    float: right;
+    background-color: #ffc445;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .videoContent {
+    float: right;
+    margin-right: 20%;
+    height: 70px;
+  }
+
+  .video {
+    height: 70px;
+  }
+
   .content {
     width: 60%;
     height: 600px;
@@ -287,9 +341,28 @@
     margin-left: 20%;
     margin-top: 2%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   ul, li {
     list-style: none;
+  }
+
+  .context {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .next {
+    width: 100px;
+    height: 100px;
+    background-color: blueviolet;
+    color: cadetblue;
+    border-radius: 10px;
   }
 </style>

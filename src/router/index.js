@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import MenuBar from '../components/MenuBar'
 import HomePage from '../page/HomePage'
-import AnswerOnline from '../page/AnswerOnline'
+import AnswerOnline from '../page/Personal/AnswerOnline'
+import AnswerHomePage from '../page/Personal/AnswerHomePage'
 import Administrators_business from '../page/Administrators/Business'
 import Administrators_question from '../page/Administrators/Question'
 import QuestionForm from '../page/Enterprise/QuestionForm'
@@ -38,6 +39,10 @@ export default new Router({
       path:'/AnswerOnline',
       name:'AnswerOnline',
       component:AnswerOnline
+    },{
+      path:'/AnswerHomePage',
+      name:'AnswerHomePage',
+      component:AnswerHomePage
     },
     {
       path:'/Administrators_business',
