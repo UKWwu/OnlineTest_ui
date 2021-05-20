@@ -7,7 +7,7 @@
       </div>
 
       <!--摄像头计时器模块-->
-      <div class="topContent">
+      <div class="topContent"  v-if="problemDisplay">
         <div class="topVideo">
           <video id="topCameraVideo" autoplay src="">
             请打开您的摄像头
@@ -20,98 +20,109 @@
       </div>
     </div>
     <div class="content">
-      <!--&lt;!&ndash; 考试须知模块 &ndash;&gt;-->
-      <!--<div id="rulesContext">-->
-      <!--<div class="logHead">-->
-      <!--<H1>考试须知</H1>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--&lt;!&ndash; 个人信息确认模块 &ndash;&gt;-->
-      <!--<div id="personContext">-->
-      <!--<div class="logHead">-->
-      <!--<H1>请确认个人信息</H1>-->
-      <!--</div>-->
-      <!--<div v-for="temp in personLog">-->
-      <!--<div class="person-row">-->
-      <!--<div class="person-att">{{temp.att}}</div>-->
-      <!--<el-input class="person-input" v-model="temp.value" :disabled="personInputChange"></el-input>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="personButton" v-if="personButtonDisplay">-->
-      <!--<el-button class="changeButton" @click="changePersonValue()">修改信息</el-button>-->
-      <!--<el-button class="nextButton" @click="enterPersonValue()">确认</el-button>-->
-      <!--</div>-->
-      <!--<div class="personButton" v-else>-->
-      <!--<el-button class="changeButton" @click="cancelPersonValue()">取消修改</el-button>-->
-      <!--<el-button class="nextButton" @click="enterChangePersonValue()">确认修改</el-button>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--&lt;!&ndash; 视频监控模块 &ndash;&gt;-->
-      <!--<div id="videoContext" v-if="videoContextDisplay">-->
-      <!--<div class="logHead">-->
-      <!--<H1>请共享您的屏幕</H1>-->
-      <!--</div>-->
-      <!--<div class="videoTextContent">-->
-      <!--<p>1.请点击分享摄像头按键，系统将会分享您的摄像头</p>-->
-      <!--<p>2.请点击分享屏幕按键，系统将会分享您的屏幕</p>-->
-      <!--<p>3.点击拍照按键，系统将会记录相关信息</p>-->
-      <!--</div>-->
-      <!--<div class="videoDiv">-->
-      <!--<div class="leftVideo">-->
-      <!--<video id="screenVideo" autoplay src="">-->
-      <!--请允许共享您的屏幕-->
-      <!--</video>-->
-      <!--</div>-->
-      <!--<div class="centerVideo">-->
-      <!--<el-button @click="screenShot()" class="getPicture" icon="el-icon-camera-solid"></el-button>-->
-      <!--</div>-->
-      <!--<div class="rightVideo">-->
-      <!--<video id="cameraVideo" autoplay src="">-->
-      <!--请打开您的摄像头-->
-      <!--</video>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="bottomDiv">-->
-      <!--<div>-->
-      <!--<input type="checkbox" @click="setVideo()">已同意分享摄像头-->
-      <!--<br>-->
-      <!--<input type="checkbox" @click="setScreenVideo()">已同意共享屏幕-->
-      <!--</div>-->
-      <!--<div>-->
-      <!--<button class="videoButton" @click="beginTest()">已拍照,进行考试</button>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--&lt;!&ndash;<input type="button" id="capture" value="截图"/>&ndash;&gt;-->
-      <!--&lt;!&ndash;<canvas id="canvas"></canvas>&ndash;&gt;-->
-      <!--&lt;!&ndash;<div>&ndash;&gt;-->
-      <!--&lt;!&ndash;<input type="range">&ndash;&gt;-->
-      <!--&lt;!&ndash;</div>&ndash;&gt;-->
-      <!--</div>-->
-      <!--答题模块-->
-      <!--<div id="problemContext" v-if="problemDisplay">-->
-      <div id="problemContext" v-model="examinationData">
-        <div v-for="temp in examinationData">
-          <div class="problemContent">
-            <div class="problemTitle">
-              {{displayProblem+1}}.{{temp.title}}
-            </div>
-            <div class="problemRadioGroup">
-              <el-radio-group v-model="answer" size="medium">
-                <div class="problemRadio">
-                  <el-radio label="A"  size="mini">A.{{temp.contentA}}</el-radio>
-                </div>
-                <div class="problemRadio">
-                  <el-radio label="B">B.{{temp.contentB}}</el-radio>
-                </div>
-                <div class="problemRadio">
-                  <el-radio label="C">C.{{temp.contentC}}</el-radio>
-                </div>
-                <div class="problemRadio">
-                  <el-radio label="D">D.{{temp.contentD}}</el-radio>
-                </div>
-              </el-radio-group>
-            </div>
+      <!-- 考试须知模块 -->
+      <div id="rulesContext">
+        <div class="logHead">
+          <H1>考试须知</H1>
+        </div>
+      </div>
+      <!-- 个人信息确认模块 -->
+      <div id="personContext">
+        <div class="logHead">
+          <H1>请确认个人信息</H1>
+        </div>
+        <div v-for="temp in personLog">
+          <div class="person-row">
+            <div class="person-att">{{temp.att}}</div>
+            <el-input class="person-input" v-model="temp.value" :disabled="personInputChange"></el-input>
           </div>
+        </div>
+        <div class="personButton" v-if="personButtonDisplay">
+          <el-button class="changeButton" @click="changePersonValue()">修改信息</el-button>
+          <el-button class="nextButton" @click="enterPersonValue()">确认</el-button>
+        </div>
+        <div class="personButton" v-else>
+          <el-button class="changeButton" @click="cancelPersonValue()">取消修改</el-button>
+          <el-button class="nextButton" @click="enterChangePersonValue()">确认修改</el-button>
+        </div>
+      </div>
+      <!-- 视频监控模块 -->
+      <div id="videoContext" v-if="videoContextDisplay">
+        <div class="logHead">
+          <H1>请共享您的屏幕</H1>
+        </div>
+        <div class="videoTextContent">
+          <p>1.请点击分享摄像头按键，系统将会分享您的摄像头</p>
+          <p>2.请点击分享屏幕按键，系统将会分享您的屏幕</p>
+          <p>3.点击拍照按键，系统将会记录相关信息</p>
+        </div>
+        <div class="videoDiv">
+          <div class="leftVideo">
+            <video id="screenVideo" autoplay src="">
+              请允许共享您的屏幕
+            </video>
+          </div>
+          <div class="centerVideo">
+            <el-button @click="screenShot()" class="getPicture" icon="el-icon-camera-solid"></el-button>
+          </div>
+          <div class="rightVideo">
+            <video id="cameraVideo" autoplay src="">
+              请打开您的摄像头
+            </video>
+          </div>
+        </div>
+        <div class="bottomDiv">
+          <div>
+            <input type="checkbox" @click="setVideo()">已同意分享摄像头
+            <br>
+            <input type="checkbox" @click="setScreenVideo()">已同意共享屏幕
+          </div>
+          <div>
+            <button class="videoButton" @click="beginTest()">已拍照,进行考试</button>
+          </div>
+        </div>
+        <!--<input type="button" id="capture" value="截图"/>-->
+        <!--<canvas id="canvas"></canvas>-->
+        <!--<div>-->
+        <!--<input type="range">-->
+        <!--</div>-->
+      </div>
+      <!--答题模块-->
+      <div id="problemContext" v-model="examinationData" v-if="problemDisplay">
+        <div style="width: 60%;text-align: left;margin-left: 20%;font-size: 25px">
+          <ul v-for="(item,i) in examinationData" :key="i">
+            <div v-if="displayProblem == i">
+              <div>{{i+1}}、{{item.title}}</div>
+              <li>
+                <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
+                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                            v-model="answer" label="A">{{item.contentA}}
+                  </el-radio>
+                </div>
+              </li>
+              <li>
+                <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
+                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                            v-model="answer" label="B">{{item.contentB}}
+                  </el-radio>
+                </div>
+              </li>
+              <li>
+                <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
+                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                            v-model="answer" label="C">{{item.contentC}}
+                  </el-radio>
+                </div>
+              </li>
+              <li>
+                <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
+                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                            v-model="answer" label="D">{{item.contentD}}
+                  </el-radio>
+                </div>
+              </li>
+            </div>
+          </ul>
         </div>
         <!--按键-->
         <div class="problemButtonContext">
@@ -125,6 +136,9 @@
 </template>
 
 <script>
+  import coo from '../cookie'
+
+
   export default {
     name: "AnswerHomePage",
     data() {
@@ -187,7 +201,11 @@
         answer: "",
         //问题答案合集
         answerList: [],
-      }
+
+        //视频流
+        screenStream:null,
+        cameraStream:null,
+    }
     },
     mounted() {
       //获取人员信息
@@ -205,7 +223,7 @@
         tempDom.textContent = i + " : ";
         i--;
         tempDom.textContent = tempDom.textContent + this.ruleData[i];
-        // ruleDom.appendChild(tempDom);
+        ruleDom.appendChild(tempDom);
       }
       let button = document.createElement("button");
       button.setAttribute("style", " width: 10%;\n" +
@@ -221,7 +239,7 @@
         ruleDom.style.display = "none";
         personDom.style.display = "block";
       }
-      // ruleDom.appendChild(button);
+      ruleDom.appendChild(button);
 
       //获取个人信息
       this.getPerson();
@@ -231,12 +249,6 @@
 
       //获取题目
       this.findQuestionByExam();
-
-      //设置题目
-      setTimeout(()=>{
-        this.problemDiv = document.getElementsByClassName("problemContent");
-        this.problemDiv[this.displayProblem].style.display = "block";
-      },1000);
     },
     methods: {
       //个人信息模块
@@ -297,7 +309,8 @@
           this.agreeCameraVideo = true;
           navigator.mediaDevices.getUserMedia({video: true})
             .then(mediaStream => {
-              document.getElementById('cameraVideo').srcObject = mediaStream;
+              this.cameraStream = mediaStream;
+              document.getElementById('cameraVideo').srcObject = this.cameraStream;
             }).then()
           let cameraVideoDiv = document.getElementById("cameraVideo");
           cameraVideoDiv.style.backgroundColor = "white";
@@ -312,7 +325,8 @@
         if (event.target.checked) {
           this.agreeScreenVideo = true;
           navigator.mediaDevices.getDisplayMedia({video: true}).then(stream => {
-            document.getElementById("screenVideo").srcObject = stream;
+            this.screenStream = stream;
+            document.getElementById("screenVideo").srcObject = this.screenStream ;
           }).catch(error => {
             console.log(error);
           })
@@ -419,6 +433,7 @@
         this.$axios.post('http://localhost:8081/IndividualTest/findTestTime', re)
           .then((res) => {
             let time = res.data.continueTime.toString().slice(11, 19);
+            console.log(res.data)
             let timeArr = time.split(":");
             let timer = 0;
             //将获取的时间转为秒数
@@ -505,46 +520,92 @@
           'http://localhost:8081/IndividualTest/findQuestionByExam', re)
           .then((res) => {
             this.examinationData = res.data;
-            for (let i = 0; i < this.examinationData.length; i++) {
-              console.log(this.examinationData[i]);
-            }
-            console.log(this.examinationData);
           }).catch((err) => {
           console.log(err)
         })
       },
-      last(){
+      last() {
         this.updateSelect();
-        if(this.displayProblem != 0){
+        if (this.displayProblem != 0) {
           this.problemNextButton = true;
-          this.problemDiv[this.displayProblem].style.display = "none";
+          // this.problemDiv[this.displayProblem].style.display = "none";
           this.displayProblem--;
-          this.problemDiv[this.displayProblem].style.display = "block";
-        }else{
+          // this.problemDiv[this.displayProblem].style.display = "block";
+        } else {
           this.$alert('无更多题目', '提示', {
             confirmButtonText: '确定',
           })
         }
       },
-      next(){
+      next() {
         this.updateSelect();
-        if(this.displayProblem < this.problemDiv.length-1){
-          this.problemDiv[this.displayProblem].style.display = "none";
+        if (this.displayProblem < this.examinationData.length - 1) {
+          // this.problemDiv[this.displayProblem].style.display = "none";
           this.displayProblem++;
-          this.problemDiv[this.displayProblem].style.display = "block";
+          // this.problemDiv[this.displayProblem].style.display = "block";
         }
 
-        if(this.displayProblem == this.problemDiv.length-1){
+        if (this.displayProblem == this.examinationData.length - 1) {
           this.problemNextButton = false;
         }
       },
       //刷新
-      updateSelect(){
+      updateSelect() {
         this.answerList[this.displayProblem] = this.answer;
         this.answer = "";
       },
-      submit(){
+      submit() {
         this.updateSelect();
+        this.$confirm('是否提交笔试?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let testAnswerList = {
+            personId: this.userId,
+            testAnswers: []
+          }
+          console.log(this.examinationData)
+          for (let i = 0; i < this.examinationData.length; i++) {
+            let temp = {
+              answer: this.answerList[i],
+              problem: this.examinationData[i].id,
+              trueAnswer: this.examinationData[i].answer,
+              score: 10,
+            }
+            testAnswerList.testAnswers.push(temp)
+          }
+          this.$axios.post(
+            'http://localhost:8081/IndividualTest/setUserGrade', testAnswerList)
+            .then((res) => {
+              this.$message({
+                type: 'success',
+                message: '交卷成功!'
+              });
+              this.logOut();
+            }).catch((err) => {
+            console.log(err)
+          })
+        }).catch((err) => {
+          this.$message({
+            type: 'error',
+            message: '取消提交'
+          });
+          console.log(err)
+        })
+      },
+
+      //退出登录
+      logOut() {
+        this.cancelVideo();
+        coo.clearCookie();
+        this.$router.push({name: 'HomePage', params: {}});
+      },
+
+      //退出取消监控
+      cancelVideo(){
+        this.screenStream.getTracks().forEach(track => track.stop());
+        this.cameraStream.getTracks().forEach(track => track.stop());
       },
     }
   }
@@ -800,7 +861,7 @@
     margin-left: 20%;
   }
 
-  .problemRadioGroup{
+  .problemRadioGroup {
     border: #908eff solid;
     border-radius: 10px;
     width: 60%;
@@ -813,10 +874,6 @@
     width: 100%;
     margin-left: 20%;
     margin-top: 3%;
-  }
-
-  .el-radio{
-    font-size: 200px;
   }
 
   .problemButtonContext {
@@ -834,7 +891,7 @@
   }
 
   /*问题的div框*/
-  .problemContent{
+  .problemContent {
     display: none;
   }
 </style>

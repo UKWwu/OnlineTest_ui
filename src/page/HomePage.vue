@@ -28,7 +28,7 @@
           v-if="passwordeWarn"
           :closable="false"
           show-icon
-          title="该账号已过期"
+          title="该账户未到生效时间"
           type="warning">
         </el-alert>
         <el-button type="primary" @click.native="login">登录</el-button>
@@ -62,6 +62,7 @@
           'http://localhost:8081/User/Login', this.user)
           .then((res) => {
             var list = res.data;
+            console.log(res.data)
             if (list.userType == null) {
               this.passwordeWarn = false;
               this.passworderrow = true;
