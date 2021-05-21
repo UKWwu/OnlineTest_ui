@@ -13,6 +13,7 @@ import Administrators_talent from '../page/Administrators/Talent'
 import Enterprise_talent from '../page/Enterprise/Talent'
 import Enterprise_TalentForm from '../page/Enterprise/TalentForm'
 import Enterprise_question from '../page/Enterprise/Question'
+import Enterprise_home from '../page/Enterprise/Home'
 import Enterprise_examination from '../page/Enterprise/Examination'
 import ReleaseTest from '../page/Enterprise/ReleaseTest'
 import PersonalHome from '../page/Personal/PersonalHome'
@@ -73,6 +74,11 @@ export default new Router({
       path:'/Enterprise_question',
       name:'Enterprise_question',
       component:Enterprise_question,
+    },
+    {
+      path:'/Enterprise_home',
+      name:'Enterprise_home',
+      component:Enterprise_home,
     },
     {
       path:'/Enterprise_talent',

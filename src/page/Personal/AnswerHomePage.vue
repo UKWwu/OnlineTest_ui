@@ -7,7 +7,7 @@
       </div>
 
       <!--摄像头计时器模块-->
-      <div class="topContent"  v-if="problemDisplay">
+      <div class="topContent" v-if="problemDisplay">
         <div class="topVideo">
           <video id="topCameraVideo" autoplay src="">
             请打开您的摄像头
@@ -203,9 +203,9 @@
         answerList: [],
 
         //视频流
-        screenStream:null,
-        cameraStream:null,
-    }
+        screenStream: null,
+        cameraStream: null,
+      }
     },
     mounted() {
       //获取人员信息
@@ -326,7 +326,7 @@
           this.agreeScreenVideo = true;
           navigator.mediaDevices.getDisplayMedia({video: true}).then(stream => {
             this.screenStream = stream;
-            document.getElementById("screenVideo").srcObject = this.screenStream ;
+            document.getElementById("screenVideo").srcObject = this.screenStream;
           }).catch(error => {
             console.log(error);
           })
@@ -353,29 +353,44 @@
           sctx.drawImage(screenVideo, 0, 0);
           cctx.drawImage(cameraVideo, 0, 0);
           this.videoPicture = true;
-          // this.downloadVideo(cameraCanvas);
-          this.downloadVideo(screenCanvas);
+          this.saveImg (cameraCanvas);
+          this.saveImg(screenCanvas);
         } else {
           window.alert("请勾选确认分享摄像头以及屏幕");
         }
-        // this.downloadVideo(cameraCanvas);
       },
       //load picture
-      downloadVideo(canvas) {
-        //传输图片
-        // console.log(canvas.toDataURL('image/png', 0.1));
-        let data = escape(canvas.toDataURL('image/png', 0.1).substring(22));
-        // this.$axios.post('http://localhost:8081/IndividualTest/saveImg', data).then((data)=>{
-        //   this.$message({
-        //     type: 'success',
-        //     message: '保存成功!'
-        //   })
-        // })
-        // const a = document.createElement('a');
-        // a.href = canvas.toDataURL('image/png');
-        // a.download = `${Date.now()}`;
-        // a.click();
+      saveImg(canvas) {
+        const dataUrl = canvas.toDataURL('images/jpg')
+        // 第一步：将dataUrl转换成Blob
+        var fd = new FormData()
+        var blob = this.dataURItoBlob(dataUrl)
+        fd.append('file', blob, Date.now() + '.jpg')
+        // 第二步：上传分享图
+        this.$axios.post('http://localhost:8081/IndividualTest/saveImg', fd).then((res) => {
+          this.$message({
+            type: 'success',
+            message: '保存成功!'
+          })
+        }).catch((err) => {
+          this.$message({
+            type: 'error',
+            message: '保存失败!'
+          })
+        })
       },
+      // base64转buffer
+      dataURItoBlob(dataURI) {
+        var byteString = atob(dataURI.split(',')[1])
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+        var ab = new ArrayBuffer(byteString.length)
+        var ia = new Uint8Array(ab)
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i)
+        }
+        return new Blob([ab], {type: mimeString})
+      },
+
       //已截图，进行考试
       beginTest() {
         if (this.videoPicture) {
@@ -474,6 +489,7 @@
           this.$alert('时间已到，系统将会自动提交试卷', '提示', {
             confirmButtonText: '确定',
             callback: action => {
+              this.logOut();
               this.$message({
                 type: 'success',
                 message: '交卷成功!'
@@ -603,7 +619,7 @@
       },
 
       //退出取消监控
-      cancelVideo(){
+      cancelVideo() {
         this.screenStream.getTracks().forEach(track => track.stop());
         this.cameraStream.getTracks().forEach(track => track.stop());
       },
