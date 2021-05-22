@@ -13,19 +13,17 @@
       </div>
     </div>
     <div class="right">
-      <AllTest v-if="testType == 'all'"></AllTest>
-      <RunTest  v-if="testType == 'run'"></RunTest>
-      <EndTest  v-if="testType == 'none'"></EndTest>
-      <none-test  v-if="testType == 'end'"></none-test>
+      <TestComponent v-if="testType == 'all'"></TestComponent>
+      <TestComponent  v-if="testType == 'run'" :status="'正在进行'"></TestComponent>
+      <TestComponent  v-if="testType == 'none'" :status="'未启动'"></TestComponent>
+      <TestComponent  v-if="testType == 'end'" :status="'已结束'"></TestComponent>
     </div>
   </div>
 </template>
 
 <script>
-  import AllTest from './ExaminationComponents/AllTest'
-  import RunTest from './ExaminationComponents/RunTest'
-  import NoneTest from './ExaminationComponents/NoneTest'
-  import EndTest from './ExaminationComponents/EndTest'
+  import TestComponent from './ExaminationComponents/TestComponent'
+
   export default {
     name: "ExaminationComponet",
     data(){
@@ -34,10 +32,7 @@
       }
     },
     components: {
-      AllTest,
-      RunTest,
-      NoneTest,
-      EndTest,
+      TestComponent
     },
     methods: {
       allTest() {

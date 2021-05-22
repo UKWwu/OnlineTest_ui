@@ -19,6 +19,8 @@ import ReleaseTest from '../page/Enterprise/ReleaseTest'
 import PersonalHome from '../page/Personal/PersonalHome'
 import DispalyGrade from '../page/Enterprise/DisplayGrade'
 import UserForm from '../page/Administrators/UserForm'
+import ces from '../page/ces'
+import Home from '../page/Enterprise/Home'
 
 
 Vue.use(Router)
@@ -30,6 +32,16 @@ export default new Router({
       path:'/',
       name:'HomePage',
       component:HomePage
+    },
+    {
+      path:'/ces',
+      name:'ces',
+      component:ces
+    },
+    {
+      path:'/Home',
+      name:'Home',
+      component:Home
     },
     {
       path:'/HomePage',

@@ -44,9 +44,6 @@
               <el-button type="primary" style="float: right" @click = "addTalent">
                 新增候选人
               </el-button>
-              <!--<el-button type="primary" style="float: right;margin-right: 5px">-->
-                <!--批量上传-->
-              <!--</el-button>-->
             </div>
             <el-table
               :data="tableData"

@@ -448,7 +448,6 @@
         this.$axios.post('http://localhost:8081/IndividualTest/findTestTime', re)
           .then((res) => {
             let time = res.data.continueTime.toString().slice(11, 19);
-            console.log(res.data)
             let timeArr = time.split(":");
             let timer = 0;
             //将获取的时间转为秒数
