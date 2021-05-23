@@ -78,7 +78,7 @@
               if (list.userType == "1")
                 this.$router.push({name: 'Administrators_business', params: {}})
               if (list.userType == "2")
-                this.$router.push({name: 'Enterprise_question', params: {}})
+                this.$router.push({name: 'Home', params: {}})
               if (list.userType == "3")
                 this.$router.push({name: 'AnswerHomePage', params: {userId:list.id}})
             }

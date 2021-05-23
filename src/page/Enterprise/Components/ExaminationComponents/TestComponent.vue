@@ -37,11 +37,13 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="300">
+        width="400">
         <template slot-scope="scope">
+          <el-button type="primary" @click="startExam(scope.row)" style="float: left">查看笔试信息</el-button>
           <el-button type="success" @click="startExam(scope.row)" v-if="scope.row.status =='未启动'">启动该场笔试</el-button>
           <el-button type="danger" @click="finishExam(scope.row)" v-if="scope.row.status =='正在进行'">结束该场笔试</el-button>
-          <el-button type="primary" @click="displayExa(scope.row)" v-if="scope.row.status =='已结束'">查看笔试结果</el-button>
+          <el-button type="primary" @click="displayExam(scope.row)" v-if="scope.row.status =='已结束'">查看笔试结果</el-button>
+          <el-button type="danger" @click="deleteExam(scope.row)">删除笔试</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -185,13 +187,45 @@
         }).catch(() => {
           this.$message({
             type: 'info',
+            message: '已取消结束'
+          });
+        });
+      },
+
+      deleteExam(val){
+        this.$confirm('是否删除该场笔试?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let re = {
+            targetID: val.id
+          };
+          this.$axios.post(
+            'http://localhost:8081/Examination/deleteExam', re)
+            .then((res) => {
+              this.findExamination();
+              this.$message({
+                type: 'success',
+                message: '成功删除!'
+              });
+            }).catch((err) => {
+            this.$message({
+              type: 'error',
+              message: '删除失败'
+            });
+            console.log(err)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
             message: '已取消删除'
           });
         });
       },
 
       //查看结果
-      displayExa(val) {
+      displayExam(val) {
         this.$router.push({name: 'DispalyGrade', params: {testId: val.id}})
       },
 

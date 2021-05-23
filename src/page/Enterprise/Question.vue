@@ -222,7 +222,7 @@
           }).catch((err) => {
           console.log(err)
         })
-      }
+      },
     },
     mounted() {
       this.userName = coo.getCookie("userName");

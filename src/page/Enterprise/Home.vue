@@ -48,7 +48,7 @@
     },
     data() {
       return {
-        component: "Report"
+        component: "Home"
       }
     },
     mounted() {
@@ -87,7 +87,6 @@
           buttonDom[i].style.backgroundColor = "#14c0e4"
         }
         buttonDom[log].style.backgroundColor = "#3b8897"
-        console.log(this.component)
       }
     }
   }

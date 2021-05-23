@@ -3,7 +3,7 @@
     <div class="left">
       <div class="leftButtonDiv">
         <button class="leftButton" style="background-color: #202897;color: white" @click="open">新增考生</button>
-        <button class="leftButton" style="background-color: #F4B335;" @click="">模板下载</button>
+        <button class="leftButton" style="background-color: #F4B335;" @click="downExcel">模板下载</button>
         <button class="leftButton" style="border-color: white;" @click="excelDialogVisible = true">批量上传</button>
       </div>
     </div>
@@ -272,6 +272,13 @@
       this.findAllTalent();
     },
     methods: {
+      //下载模板
+      downExcel() {
+        var a = document.createElement('a');
+        a.href = "../../../../static/flie/人才库模板.xlsx";
+        a.download = "人才库模板.xlsx";
+        a.click();
+      },
       async getData(ev) {
         let file = ev.raw;
         if (!file) return;

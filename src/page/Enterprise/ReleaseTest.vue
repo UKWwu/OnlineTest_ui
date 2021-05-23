@@ -112,7 +112,6 @@
                   <el-button style="margin-top: 12px;" type="danger" @click="submit">提交</el-button>
                 </div>
               </div>
-
             </div>
           </el-main>
         </el-container>
