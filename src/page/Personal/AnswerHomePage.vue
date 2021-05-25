@@ -379,6 +379,23 @@
           })
         })
       },
+      //存入数据库
+      savePicture(picture){
+        console.log(picture)
+        this.$axios.post('http://localhost:8081/IndividualTest/savePicture', picture).then((res) => {
+          this.$message({
+            type: 'success',
+            message: '保存成功!'
+          })
+        }).catch(
+          (err) => {
+            this.$message({
+              type: 'error',
+              message: '保存失败!'
+            })
+          }
+        )
+      },
       // base64转buffer
       dataURItoBlob(dataURI) {
         var byteString = atob(dataURI.split(',')[1])

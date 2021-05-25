@@ -173,7 +173,7 @@
     data() {
       return {
         testType: "all",
-        examForm: true,
+        examForm: false,
         findKey: "",
         active: 1,
         number: 0,
@@ -370,7 +370,8 @@
         if (dateString) {
           var arr1 = dateString.split(" ");
           var sdate = arr1[0].split('-');
-          var date = new Date(sdate[0], sdate[1] - 1, sdate[2]);
+          var min = arr1[1].split(':');
+          var date = new Date(sdate[0], sdate[1] - 1, sdate[2],min[0],min[1]);
           this.examination.continueTime = date;
         }
         this.examination.userName = coo.getCookie("userName");
@@ -417,7 +418,17 @@
         this.$axios.post(
           'http://localhost:8081/Examination/addExaminee', re)
           .then((res) => {
+            let userAndExam = res.data;
+            for(let i=0;i<userAndExam.length;i++){
+              this.updateUserAndExam(userAndExam[i]);
+            }
           }).catch((err) => {
+          console.log(err)
+        })
+      },
+      updateUserAndExam(userAndExam){
+        this.$axios.post('http://localhost:8081/Examination/updateUserAndExam', userAndExam)
+          .then((res) => {}).catch((err)=>{
           console.log(err)
         })
       },
