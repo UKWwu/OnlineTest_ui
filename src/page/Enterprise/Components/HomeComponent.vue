@@ -30,12 +30,13 @@
         <div class="headTitle" style="top: 45%;">
           结果报告
         </div>
-        <div style="margin-left:10%;margin-top:10%;width:30%;float:left;background-color: white">
+        <div style="margin-left:10%;margin-top:3%;width:30%;float:left;background-color: white">
           <el-table
             :data="tableData"
-            style="width: 100%">
-            <el-table-column prop="name" label="成绩范围" width="202"></el-table-column>
-            <el-table-column prop="value" label="数量" width="200"></el-table-column>
+            max-height="400"
+            style="width: 100%;">
+            <el-table-column prop="name" label="成绩范围" ></el-table-column>
+            <el-table-column prop="value" label="数量"></el-table-column>
           </el-table>
         </div>
         <div id="displayMain"
@@ -52,8 +53,8 @@
           <el-table
             :data="talentData"
             style="width: 100%">
-            <el-table-column prop="name" label="姓名" width="157"></el-table-column>
-            <el-table-column prop="grade" label="成绩" width="150"></el-table-column>
+            <el-table-column prop="name" label="姓名" ></el-table-column>
+            <el-table-column prop="grade" label="成绩"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -122,7 +123,6 @@
       //找到最近的一次考试
       findEndTest() {
         let req = {
-          targetID: "1",
           userName: this.userName
         };
         this.$axios.post('http://localhost:8081/Examination/findEndTest', req)
@@ -134,9 +134,9 @@
         })
       },
       //获取信息考试
-      findRatioById() {
+      findRatioById(val) {
         let req = {
-          targetID: "1"
+          targetID: val
         };
         this.$axios.post('http://localhost:8081/Examination/findRatioById', req)
           .then((res) => {
@@ -174,7 +174,7 @@
   }
 
   .buttonDiv {
-    width: 70vw;
+    width: 100%;
     height: 33vh;
     margin-top: 1%;
     margin-left: 4%;
@@ -210,77 +210,72 @@
 
   .left {
     width: 70%;
-    height: 94vh;
+    height: 70%;
     float: left;
   }
 
   .right {
     width: 30%;
-    height: 94vh;
+    height: 70%;
     float: right;
   }
 
   .img1 {
-    margin-left: 20px;
     background-image: url(../../../assets/img/首页.png);
     background-position: 0px 0px;
     background-repeat: no-repeat;
-    padding: 10px 5px;
     width: 50px;
     height: 50px;
-    margin-right: 10px;
+    margin-right: 10%;
+    margin-left: 5%;
   }
 
   .img2 {
-    margin-left: 20px;
     background-image: url(../../../assets/img/首页.png);
     background-position: 0px -70px;
     background-repeat: no-repeat;
-    padding: 10px 5px;
     width: 50px;
     height: 40px;
-    margin-right: 10px;
+    margin-right: 10%;
+    margin-left: 5%;
   }
 
   .img3 {
     background-image: url(../../../assets/img/首页.png);
     background-position: 0px -180px;
     background-repeat: no-repeat;
-    padding: 10px 5px;
     width: 50px;
     height: 45px;
-    margin-left: 20px;
-    margin-right: 10px;
+    margin-right: 10%;
+    margin-left: 5%;
   }
 
   .img4 {
     background-image: url(../../../assets/img/首页.png);
     background-position: 0px -240px;
     background-repeat: no-repeat;
-    padding: 10px 5px;
     width: 50px;
     height: 50px;
-    margin-left: 20px;
-    margin-right: 10px;
+    margin-right: 10%;
+    margin-left: 5%;
   }
 
   .img5 {
     background-image: url(../../../assets/img/首页.png);
     background-position: 0px -300px;
     background-repeat: no-repeat;
-    padding: 10px 5px;
     width: 50px;
     height: 50px;
-    margin-left: 20px;
-    margin-right: 10px;
+    margin-right: 10%;
+    margin-left: 5%;
   }
 
   .buttonContent {
     display: flex;
-    width: 180px;
+    width: 15%;
     height: 100px;
-    margin-left: 30px;
-    margin-right: 40px;
+    margin-left: 1%;
+    margin-right: 3%;
     align-items: center;
     border-color: #e9ebed;
     border-width: 1px;

@@ -144,11 +144,12 @@
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="人员信息" name="third">
+              <el-button @click="downUserData" type="primary" style="margin-left: 63%">下载信息</el-button>
               <el-table
                 :data="userData"
-                height="600"
+                height="500"
                 border
-                style="width: 40%;margin-left: 30%">
+                style="width: 40%;margin-left: 30%;margin-top: 3%">
                 <el-table-column
                   fixed
                   prop="userName"
@@ -176,6 +177,7 @@
 
 <script>
   import coo from '../../../cookie'
+  import xlsx from 'xlsx'
 
   export default {
     name: "AllTest",
@@ -345,7 +347,7 @@
 
       //查看结果
       displayExam(val) {
-        this.$parent.$parent.reportButton();
+        this.$parent.$parent.reportButton(val.id);
       },
 
       //查看笔试信息
@@ -403,6 +405,21 @@
         })
       }
       ,
+
+      //导出用户信息
+      downUserData(){
+        let arr = this.userData.map((item)=>{
+          return{
+            姓名:item.userName,
+            账号:item.userAccount,
+            密码:item.password
+          }
+        });
+        let sheet = xlsx.utils.json_to_sheet(arr),
+        book = xlsx.utils.book_new();
+        xlsx.utils.book_append_sheet(book,sheet,"sheet1");
+        xlsx.writeFile(book,'考生账号.xls');
+      },
 
       //
       handleClick(tab, event) {

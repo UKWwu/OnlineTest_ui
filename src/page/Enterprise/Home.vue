@@ -16,16 +16,16 @@
       <button class="homeButton" @click="talentButton">
         考生
       </button>
-      <button class="homeButton" @click="reportButton">
+      <button class="homeButton" disabled="true">
         报表
       </button>
     </div>
     <div>
-      <HomeComponent v-show="component == 'Home'"></HomeComponent>
+      <HomeComponent v-if="component == 'Home'"></HomeComponent>
       <ExaminationComponent v-if="component == 'Examination'"></ExaminationComponent>
       <ProblemComponent v-if="component == 'Problem'"></ProblemComponent>
       <TalentComponent v-if="component == 'Talent'"></TalentComponent>
-      <ReportComponent v-show="component == 'Report'"></ReportComponent>
+      <ReportComponent v-if="component == 'Report'" :examId="examId"></ReportComponent>
     </div>
   </div>
 </template>
@@ -48,7 +48,8 @@
     },
     data() {
       return {
-        component: "Home"
+        component: "Home",
+        examId:""
       }
     },
     mounted() {
@@ -75,8 +76,9 @@
         this.component = "Talent";
       },
       //报表模块
-      reportButton() {
+      reportButton(val) {
         this.changeButtonColor(4);
+        this.examId = val;
         this.component = "Report";
       },
 
@@ -100,7 +102,7 @@
 
   .top {
     background-color: #14c0e4;
-    height: 6vh;
+    height: 8vh;
     width: 100%;
     color: white;
     text-align: center;

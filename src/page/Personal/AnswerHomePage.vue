@@ -47,7 +47,7 @@
         </div>
       </div>
       <!-- 视频监控模块 -->
-      <div id="videoContext" v-if="videoContextDisplay">
+      <div id="videoContext" v-show="videoContextDisplay">
         <div class="logHead">
           <H1>请共享您的屏幕</H1>
         </div>
@@ -90,37 +90,42 @@
       <!--答题模块-->
       <div id="problemContext" v-model="examinationData" v-if="problemDisplay">
         <div style="width: 60%;text-align: left;margin-left: 20%;font-size: 25px">
-          <ul v-for="(item,i) in examinationData" :key="i">
+          <ul v-for="(item,i) in examinationData" :key="i" style="list-style-type: none;">
             <div v-if="displayProblem == i">
               <div>{{i+1}}、{{item.title}}</div>
-              <li>
+              <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
                   <el-radio style="margin-left: 5%;margin-bottom: 2%"
                             v-model="answer" label="A">{{item.contentA}}
                   </el-radio>
                 </div>
               </li>
-              <li>
+              <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
                   <el-radio style="margin-left: 5%;margin-bottom: 2%"
                             v-model="answer" label="B">{{item.contentB}}
                   </el-radio>
                 </div>
               </li>
-              <li>
+              <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
                   <el-radio style="margin-left: 5%;margin-bottom: 2%"
                             v-model="answer" label="C">{{item.contentC}}
                   </el-radio>
                 </div>
               </li>
-              <li>
+              <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
                   <el-radio style="margin-left: 5%;margin-bottom: 2%"
                             v-model="answer" label="D">{{item.contentD}}
                   </el-radio>
                 </div>
               </li>
+              <el-input type="textarea"  v-if="item.type == '问答题'"
+                        v-model="item.content" :rows="10"
+                        style="margin-top: 2%;height: 40vh;font-size: 30px;margin-bottom: 4%"
+                        placeholder="请输入答案">
+              </el-input>
             </div>
           </ul>
         </div>
@@ -132,6 +137,7 @@
         </div>
       </div>
     </div>
+    <div v-visibility-change="change" style="display: none"></div>
   </div>
 </template>
 
@@ -188,6 +194,8 @@
           education: "学历",
         },
         testDate: 0,
+        //拍照时间
+        pictureTime:0,
 
         //题目
         examinationData: [],
@@ -205,6 +213,12 @@
         //视频流
         screenStream: null,
         cameraStream: null,
+
+        //跳出窗口限制
+        limitNumber:0,
+        nowNumber:0,
+
+        pictureNumber:0,
       }
     },
     mounted() {
@@ -353,14 +367,14 @@
           sctx.drawImage(screenVideo, 0, 0);
           cctx.drawImage(cameraVideo, 0, 0);
           this.videoPicture = true;
-          this.saveImg (cameraCanvas);
-          this.saveImg(screenCanvas);
+          this.saveImg (cameraCanvas,"摄像头");
+          this.saveImg(screenCanvas,"屏幕");
         } else {
           window.alert("请勾选确认分享摄像头以及屏幕");
         }
       },
       //load picture
-      saveImg(canvas) {
+      saveImg(canvas,type) {
         const dataUrl = canvas.toDataURL('images/jpg')
         // 第一步：将dataUrl转换成Blob
         var fd = new FormData()
@@ -368,10 +382,12 @@
         fd.append('file', blob, Date.now() + '.jpg')
         // 第二步：上传分享图
         this.$axios.post('http://localhost:8081/IndividualTest/saveImg', fd).then((res) => {
-          this.$message({
-            type: 'success',
-            message: '保存成功!'
-          })
+          let picture = {
+            talentId : this.userId,
+            picture : res.data,
+            type: type,
+          }
+          this.savePicture(picture);
         }).catch((err) => {
           this.$message({
             type: 'error',
@@ -381,12 +397,7 @@
       },
       //存入数据库
       savePicture(picture){
-        console.log(picture)
         this.$axios.post('http://localhost:8081/IndividualTest/savePicture', picture).then((res) => {
-          this.$message({
-            type: 'success',
-            message: '保存成功!'
-          })
         }).catch(
           (err) => {
             this.$message({
@@ -548,13 +559,28 @@
         let re = {
           targetID: this.userId
         }
-        this.$axios.post(
-          'http://localhost:8081/IndividualTest/findQuestionByExam', re)
-          .then((res) => {
-            this.examinationData = res.data;
-          }).catch((err) => {
-          console.log(err)
+        this.$axios.post('http://localhost:8081/IndividualTest/findExamByUserId', re).then((res)=>{
+           this.limitNumber = res.data.limitNumber;
+           this.pictureNumber = res.data.pictureNumber;
+        }).then(()=>{
+          this.$axios.post(
+            'http://localhost:8081/IndividualTest/findQuestionByExam', re)
+            .then((res) => {
+              this.examinationData = res.data;
+              this.pictureNumber = this.pictureNumber;
+              this.examinationData.forEach((item)=>{
+                if(item.type == '问答题'){
+                  item.content = ""
+                }
+              })
+              if(this.examinationData.length == 1){
+                this.problemNextButton = false;
+              }
+            }).catch((err) => {
+            console.log(err)
+          })
         })
+
       },
       last() {
         this.updateSelect();
@@ -571,15 +597,19 @@
       },
       next() {
         this.updateSelect();
-        if (this.displayProblem < this.examinationData.length - 1) {
-          // this.problemDiv[this.displayProblem].style.display = "none";
-          this.displayProblem++;
-          // this.problemDiv[this.displayProblem].style.display = "block";
+        if(this.pictureTime<this.pictureNumber){
+          this.pictureTime++;
+          this.screenShot();
         }
-
         if (this.displayProblem == this.examinationData.length - 1) {
           this.problemNextButton = false;
         }
+
+        if (this.displayProblem < this.examinationData.length - 1) {
+          this.displayProblem++;
+        }
+
+
       },
       //刷新
       updateSelect() {
@@ -597,13 +627,25 @@
             personId: this.userId,
             testAnswers: []
           }
-          console.log(this.examinationData)
           for (let i = 0; i < this.examinationData.length; i++) {
-            let temp = {
-              answer: this.answerList[i],
-              problem: this.examinationData[i].id,
-              trueAnswer: this.examinationData[i].answer,
-              score: 10,
+            let temp = {};
+            if(this.examinationData[i].type == "选择题"){
+              temp = {
+                answer: this.answerList[i],
+                problemId: this.examinationData[i].id,
+                trueAnswer: this.examinationData[i].answer,
+                score: this.examinationData[i].score,
+                title:this.examinationData[i].title,
+                type:"选择题"
+              }
+            }else if(this.examinationData[i].type == "问答题"){
+              temp = {
+                answer: this.examinationData[i].content,
+                problemId: this.examinationData[i].id,
+                score: this.examinationData[i].score,
+                title:this.examinationData[i].title,
+                type:"问答题"
+              }
             }
             testAnswerList.testAnswers.push(temp)
           }
@@ -638,6 +680,61 @@
       cancelVideo() {
         this.screenStream.getTracks().forEach(track => track.stop());
         this.cameraStream.getTracks().forEach(track => track.stop());
+      },
+
+      //监控是否跳出页面
+      change(evt, hidden) {
+        //hidden为false的时候，表示从别的页面切换回当前页面
+        //hidden为true的时候，表示从当前页面切换到别的页面
+        if(hidden === false){
+          this.nowNumber++;
+          if(this.nowNumber < this.limitNumber){
+            this.$alert('请勿离开考试页面，离开'+this.limitNumber+'次将会自动交卷，当前'+this.nowNumber+"次", '警告', {
+              confirmButtonText: '确定',
+            });
+          }else{
+            let testAnswerList = {
+              personId: this.userId,
+              testAnswers: []
+            }
+            for (let i = 0; i < this.examinationData.length; i++) {
+              let temp = {};
+              if(this.examinationData[i].type == "选择题"){
+                temp = {
+                  answer: this.answerList[i],
+                  problemId: this.examinationData[i].id,
+                  trueAnswer: this.examinationData[i].answer,
+                  score: this.examinationData[i].score,
+                  title:this.examinationData[i].title,
+                  type:"选择题"
+                }
+              }else if(this.examinationData[i].type == "问答题"){
+                temp = {
+                  answer: this.examinationData[i].content,
+                  problemId: this.examinationData[i].id,
+                  score: this.examinationData[i].score,
+                  title:this.examinationData[i].title,
+                  type:"问答题"
+                }
+              }
+              testAnswerList.testAnswers.push(temp)
+            }
+            this.$axios.post(
+              'http://localhost:8081/IndividualTest/setUserGrade', testAnswerList)
+              .then((res) => {
+                this.$message({
+                  type: 'success',
+                  message: '交卷成功!'
+                });
+                this.logOut();
+              }).catch((err) => {
+              console.log(err)
+            })
+            this.$alert('考试已结束，自动交卷','警告', {
+              confirmButtonText: '确定',
+            });
+          }
+        }
       },
     }
   }
@@ -926,4 +1023,5 @@
   .problemContent {
     display: none;
   }
+
 </style>

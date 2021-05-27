@@ -3,7 +3,6 @@
     <div class="left">
       <div class="leftButtonDiv">
         <button class="leftButton" style="background-color: #202897;color: white" @click="openExamForm">新建考试</button>
-        <button class="leftButton" style="border-color: white;" @click="changeComponent">考试分析</button>
       </div>
       <div class="testLog">
         <button class="testLogButton" @click="allTest">所有考试</button>
@@ -35,7 +34,7 @@
           <div class="formContent" v-if="active == 1">
             <el-form ref="examination" :model="examination" label-width="120px" style="margin-left: 20%">
               <el-form-item label="笔试名称">
-                <el-input v-model="examination.name" style="width: 45%;"></el-input>
+                <el-input v-model="examination.name" style="width: 46%;"></el-input>
               </el-form-item>
               <el-form-item label="笔试开始时间">
                 <el-col :span="11">
@@ -59,6 +58,12 @@
                     placeholder="选择时间">
                   </el-time-select>
                 </el-col>
+              </el-form-item>
+              <el-form-item label="离开页面次数">
+                <el-input v-model="examination.limitNumber" style="width: 46%;"></el-input>
+              </el-form-item>
+              <el-form-item label="抓拍次数">
+                <el-input v-model="examination.pictureNumber" style="width: 46%;"></el-input>
               </el-form-item>
               <el-form-item label="是否启动" prop="form">
                 <el-switch v-model="examStatus"></el-switch>
@@ -167,6 +172,7 @@
 <script>
   import TestComponent from './ExaminationComponents/TestComponent'
   import coo from '../../cookie'
+  import {Loading} from 'element-ui';
 
   export default {
     name: "ExaminationComponet",
@@ -201,6 +207,7 @@
           number: 10
         },
         problemList: [],
+        loadingInstance: null,
       }
     },
     components: {
@@ -371,7 +378,7 @@
           var arr1 = dateString.split(" ");
           var sdate = arr1[0].split('-');
           var min = arr1[1].split(':');
-          var date = new Date(sdate[0], sdate[1] - 1, sdate[2],min[0],min[1]);
+          var date = new Date(sdate[0], sdate[1] - 1, sdate[2], min[0], min[1]);
           this.examination.continueTime = date;
         }
         this.examination.userName = coo.getCookie("userName");
@@ -400,35 +407,47 @@
             };
             this.addExamProblem(reProblem);
             this.examForm = false;
-            this.$message({
-              type: 'success',
-              message: '新建考试成功!'
-            });
           }).then(() => {
           this.testType = "";
         }).then(() => {
           this.testType = "all";
-
         }).catch((err) => {
           console.log(err)
         })
       },
       //添加人员
       addExaminee(re) {
+        this.loadingInstance = Loading.service({
+          lock: true,    //是否锁定
+          text: "拼命加载中...",   //显示在加载图标下方的加载文案
+          background: 'rgba(0,0,0,.7)',   //遮罩背景色
+        });
         this.$axios.post(
           'http://localhost:8081/Examination/addExaminee', re)
           .then((res) => {
             let userAndExam = res.data;
-            for(let i=0;i<userAndExam.length;i++){
+            for (let i = 0; i < userAndExam.length; i++) {
               this.updateUserAndExam(userAndExam[i]);
             }
-          }).catch((err) => {
+          }).then(() => {
+          this.testType = "";
+        }).then(() => {
+          this.testType = "all";
+          this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+            this.loadingInstance.close();
+          });
+          this.$message({
+            type: 'success',
+            message: '新建考试成功!'
+          });
+        }).catch((err) => {
           console.log(err)
         })
       },
-      updateUserAndExam(userAndExam){
+      updateUserAndExam(userAndExam) {
         this.$axios.post('http://localhost:8081/Examination/updateUserAndExam', userAndExam)
-          .then((res) => {}).catch((err)=>{
+          .then((res) => {
+          }).catch((err) => {
           console.log(err)
         })
       },
