@@ -4,7 +4,8 @@
       <div class="leftDiv">
         <el-table
           :data="talentData"
-          style="width: 100%;">
+          style="width: 100%;"
+          height="80vh">
           <el-table-column
             fixed
             prop="name"
@@ -264,7 +265,7 @@
         }
       },
       next() {
-        if (this.displayProblem == this.examinationData.length -1) {
+        if (this.displayProblem == this.examinationData.length - 1) {
           this.$alert('无更多题目', '提示', {
             confirmButtonText: '确定',
           })
@@ -280,7 +281,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if(item.grade <= item.score){
+          if (item.grade <= item.score) {
             this.$axios.post('http://localhost:8081/EnterpriseTalent/updateTestAnswer', item)
               .then((res) => {
                 this.findTalent(this.examId);
@@ -290,10 +291,10 @@
                   message: '打分成功'
                 });
               })
-          }else{
+          } else {
             this.$message({
-              type:'error',
-              message:'请输入正确的分数'
+              type: 'error',
+              message: '请输入正确的分数'
             })
           }
         }).catch((err) => {
@@ -341,7 +342,7 @@
     float: left;
   }
 
-  .rightDiv{
+  .rightDiv {
     width: 40%;
     height: 80vh;
     margin-top: 3%;

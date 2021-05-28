@@ -5,6 +5,7 @@
         <button class="leftButton" style="background-color: #202897;color: white" @click="open">新增考生</button>
         <button class="leftButton" style="background-color: #F4B335;" @click="downExcel">模板下载</button>
         <button class="leftButton" style="border-color: white;" @click="excelDialogVisible = true">批量上传</button>
+        <button class="leftButton" style="background-color: red;border-color: white;" @click="deleteTalentList">批量删除</button>
       </div>
     </div>
     <div class="right">
@@ -14,8 +15,14 @@
       </div>
       <el-table
         :data="tableData"
+        ref="talentList"
+        @selection-change="handleSelectionChange"
         border
         style="width: 90%;">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           fixed
           prop="name"
@@ -45,12 +52,12 @@
         <el-table-column
           prop="email"
           label="邮箱"
-          width="120">
+          width="200">
         </el-table-column>
         <el-table-column
           prop="remark"
           label="备注"
-          width="300">
+          width="220">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -137,7 +144,7 @@
               <el-form-item label="联系电话" prop="telphone">
                 <el-input v-model="talent.telphone" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
-              <el-form-item label="电子邮箱" prop="email">
+              <el-form-item label="电子邮箱" prop="email" >
                 <el-input v-model="talent.email" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
               <el-form-item label="备注" prop="remark">
@@ -263,7 +270,8 @@
         talent: {
           userName:""
         },
-        talentForm:false
+        talentForm:false,
+        talentList:[]
       }
     },
     mounted() {
@@ -272,6 +280,42 @@
       this.findAllTalent();
     },
     methods: {
+      //选中
+      handleSelectionChange(val) {
+        this.talentList = val;
+      },
+      deleteTalentList(){
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          for(let i=0;i<this.talentList.length;i++){
+            let re = {targetID: this.talentList[i].id};
+            this.$axios.post(
+              'http://localhost:8081/EnterpriseTalent/deleteTalent', re)
+              .then((res) => {
+              }).catch((err) => {
+              this.$message({
+                type: 'error',
+                message: '删除失败'
+              });
+              console.log(err)
+            })
+          }
+        }).then(()=>{
+          this.findAllTalent();
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(()=>{
+          this.$message({
+            type: 'info',
+            message: '取消删除!'
+          });
+        })
+      },
       //下载模板
       downExcel() {
         var a = document.createElement('a');
@@ -305,9 +349,14 @@
             obj[key] = v;
           }
           arr.push(obj);
-          this.addTalent(obj);
+          obj.userName = coo.getCookie("userName");
+          this.$axios.post(
+            'http://localhost:8081/EnterpriseTalent/addTalent', obj)
+            .then((res) => {
+            }).catch((err) => {
+            console.log(err)
+          })
         })
-        console.log(arr);
         this.excelDialogVisible = false;
         this.$message({
           type: 'success',

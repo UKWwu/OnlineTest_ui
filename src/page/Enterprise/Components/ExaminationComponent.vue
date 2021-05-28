@@ -3,6 +3,7 @@
     <div class="left">
       <div class="leftButtonDiv">
         <button class="leftButton" style="background-color: #202897;color: white" @click="openExamForm">新建考试</button>
+        <button class="leftButton" style="background-color: red;color: white" @click="deleteExamList">批量删除</button>
       </div>
       <div class="testLog">
         <button class="testLogButton" @click="allTest">所有考试</button>
@@ -12,10 +13,10 @@
       </div>
     </div>
     <div class="right">
-      <TestComponent v-if="testType == 'all'"></TestComponent>
-      <TestComponent v-if="testType == 'run'" :status="'正在进行'"></TestComponent>
-      <TestComponent v-if="testType == 'none'" :status="'未启动'"></TestComponent>
-      <TestComponent v-if="testType == 'end'" :status="'已结束'"></TestComponent>
+      <TestComponent v-if="testType == 'all'" ref='TestComponent'></TestComponent>
+      <TestComponent v-if="testType == 'run'" :status="'正在进行'" ref='TestComponent'></TestComponent>
+      <TestComponent v-if="testType == 'none'" :status="'未启动'" ref='TestComponent'></TestComponent>
+      <TestComponent v-if="testType == 'end'" :status="'已结束'" ref='TestComponent'></TestComponent>
     </div>
     <div>
       <el-dialog
@@ -91,6 +92,7 @@
             </div>
             <el-table
               :data="problemData"
+              ref="problemData"
               @selection-change="handleSelectionChange"
               border
               height="250"
@@ -220,6 +222,10 @@
       this.findExamTalent();
     },
     methods: {
+      handleSelectionChange(val) {
+        this.problemList = val;
+        console.log(this.problemList)
+      },
       allTest() {
         this.testType = "all";
       },
@@ -265,10 +271,6 @@
         } else {
           this.$refs.multipleTable.clearSelection();
         }
-      },
-      handleSelectionChange(val) {
-        this.problemList = val;
-        console.log(this.problemList)
       },
 
       //查找题目
@@ -349,7 +351,8 @@
       //寻找参考人员
       findExamTalent() {
         let re = {
-          userName: this.userName
+          userName: this.userName,
+          key:"添加考试场次"
         };
         this.$axios.post(
           'http://localhost:8081/Examination/findExamTalent', re)
@@ -459,6 +462,11 @@
           }).catch((err) => {
           console.log(err)
         })
+      },
+
+      //调用批量删除
+      deleteExamList(){
+        this.$refs.TestComponent.deleteExamList();
       },
     }
   }

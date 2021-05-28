@@ -5,6 +5,7 @@
         <button class="leftButton" style="background-color: #202897;color: white" @click="openQuestion">新增试题</button>
         <button class="leftButton" style="background-color: #F4B335;" @click="downExcel">模板下载</button>
         <button class="leftButton" style="border-color: white;" @click="excelDialogVisible = true">批量上传</button>
+        <button class="leftButton" style="background-color: red;border-color: white;" @click="deleteQuestionList">批量删除</button>
       </div>
     </div>
     <div class="right">
@@ -16,7 +17,13 @@
         <el-table
           :data="tableData"
           border
+          ref="questionList"
+          @selection-change="handleSelectionChange"
           style="width: 90%;">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column
             fixed
             prop="name"
@@ -114,11 +121,11 @@
           width="60%"
           center>
           <el-main style="width: 100%;height: 100%;background-color: white">
-            <el-page-header @back="goback" content="新增考生" v-if="this.formType == 'add'">
+            <el-page-header @back="goback" content="新增试题" v-if="this.formType == 'add'">
             </el-page-header>
-            <el-page-header @back="goback" content="编辑考生" v-if="this.formType == 'update'">
+            <el-page-header @back="goback" content="编辑试题" v-if="this.formType == 'update'">
             </el-page-header>
-            <el-page-header @back="goback" content="查看考生" v-if="this.formType == 'display'">
+            <el-page-header @back="goback" content="查看试题" v-if="this.formType == 'display'">
             </el-page-header>
 
 
@@ -322,6 +329,7 @@
             type: "String"
           },
         },
+        questionList:[],
       }
     },
     mounted() {
@@ -330,6 +338,43 @@
       this.findQuestionByPage();
     },
     methods: {
+      //批量删除
+      handleSelectionChange(val){
+        this.questionList = val;
+      },
+
+      deleteQuestionList(){
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          for(let i=0;i<this.questionList.length;i++){
+            this.$axios.post(
+              'http://localhost:8081/EnterpriseQuestion/deleteQuestion', this.questionList[i])
+              .then((res) => {
+              }).catch((err) => {
+              this.$message({
+                type: 'error',
+                message: '删除失败'
+              });
+              console.log(err)
+            })
+          }
+        }).then(()=>{
+          this.findQuestionByPage();
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(()=>{
+          this.$message({
+            type: 'info',
+            message: '取消删除!'
+          });
+        })
+      },
+
       //下载模板
       downExcel() {
         var a = document.createElement('a');

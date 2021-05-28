@@ -567,7 +567,6 @@
             'http://localhost:8081/IndividualTest/findQuestionByExam', re)
             .then((res) => {
               this.examinationData = res.data;
-              this.pictureNumber = this.pictureNumber;
               this.examinationData.forEach((item)=>{
                 if(item.type == '问答题'){
                   item.content = ""
