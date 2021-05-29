@@ -95,28 +95,28 @@
               <div>{{i+1}}、{{item.title}}</div>
               <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
-                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                  <el-radio style="margin-left: 2%;margin-bottom: 2%;margin-top: 2%;"
                             v-model="answer" label="A">{{item.contentA}}
                   </el-radio>
                 </div>
               </li>
               <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
-                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                  <el-radio style="margin-left: 2%;margin-bottom: 2%;margin-top: 2%;"
                             v-model="answer" label="B">{{item.contentB}}
                   </el-radio>
                 </div>
               </li>
               <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
-                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                  <el-radio style="margin-left: 2%;margin-bottom: 2%;margin-top: 2%;"
                             v-model="answer" label="C">{{item.contentC}}
                   </el-radio>
                 </div>
               </li>
               <li  v-if="item.type == '选择题'">
                 <div style="border: black;border-width: 1px;border-style: solid;margin-top: 5%;">
-                  <el-radio style="margin-left: 5%;margin-bottom: 2%"
+                  <el-radio style="margin-left: 2%;margin-bottom: 2%;margin-top: 2%;"
                             v-model="answer" label="D">{{item.contentD}}
                   </el-radio>
                 </div>
@@ -572,6 +572,8 @@
                   item.content = ""
                 }
               })
+              console.log(res.data);
+              console.log(this.examinationData);
               if(this.examinationData.length == 1){
                 this.problemNextButton = false;
               }
@@ -600,14 +602,12 @@
           this.pictureTime++;
           this.screenShot();
         }
-        if (this.displayProblem == this.examinationData.length - 1) {
-          this.problemNextButton = false;
-        }
-
         if (this.displayProblem < this.examinationData.length - 1) {
           this.displayProblem++;
         }
-
+        if (this.displayProblem == this.examinationData.length - 1) {
+          this.problemNextButton = false;
+        }
 
       },
       //刷新

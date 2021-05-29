@@ -75,8 +75,8 @@
               //2 企业
               //3 用户
               //4 临时用户且过期
-              if (list.userType == "1")
-                this.$router.push({name: 'Administrators_business', params: {}})
+              // if (list.userType == "1")
+              //   this.$router.push({name: 'Administrators_business', params: {}})
               if (list.userType == "2")
                 this.$router.push({name: 'Home', params: {}})
               if (list.userType == "3")

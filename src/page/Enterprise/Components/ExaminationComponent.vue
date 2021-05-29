@@ -40,13 +40,13 @@
               <el-form-item label="笔试开始时间">
                 <el-col :span="11">
                   <el-date-picker type="date" placeholder="选择日期" v-model="examination.beginTime"
-                                  style="width: 100%;"></el-date-picker>
+                                  style="width: 100%;" :picker-options="beginOptions"></el-date-picker>
                 </el-col>
               </el-form-item>
               <el-form-item label="笔试结束时间">
                 <el-col :span="11">
                   <el-date-picker type="date" placeholder="选择日期" v-model="examination.endTime"
-                                  style="width: 100%;"></el-date-picker>
+                                  style="width: 100%;" :picker-options="endOptions"></el-date-picker>
                 </el-col>
               </el-form-item>
               <el-form-item label="考试时间">
@@ -180,6 +180,18 @@
     name: "ExaminationComponet",
     data() {
       return {
+        beginOptions: {
+          disabledDate(date) {
+            //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+            return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+          }
+        },
+        endOptions: {
+          disabledDate(date) {
+            //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+            return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+          }
+        },
         testType: "all",
         examForm: false,
         findKey: "",
@@ -256,7 +268,7 @@
         };
       },
       next() {
-        this.active++;
+          this.active++;
       },
       pre() {
         this.active--;

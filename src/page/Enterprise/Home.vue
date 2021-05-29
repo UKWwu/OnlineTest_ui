@@ -19,6 +19,16 @@
       <button class="homeButton" disabled="true">
         报表
       </button>
+      <div style="padding-top: 0.5%;margin-left: 90%">
+        <el-dropdown>
+          <el-avatar :size="50">
+            <i class="el-icon-user" style="font-size: 30px;margin-top: 10px"></i>
+          </el-avatar>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item  @click.native = "logOut" style="width: 100px;text-align: center;height: 30px">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
     <div>
       <HomeComponent v-if="component == 'Home'"></HomeComponent>
@@ -36,6 +46,7 @@
   import TalentComponent from './Components/TalentComponent'
   import ReportComponent from './Components/ReportComponent'
   import ExaminationComponent from './Components/ExaminationComponent'
+  import coo from '../cookie'
 
   export default {
     name: "Home",
@@ -49,12 +60,16 @@
     data() {
       return {
         component: "Home",
-        examId:""
+        examId: ""
       }
     },
     mounted() {
     },
     methods: {
+      logOut(){
+        coo.clearCookie();
+        this.$router.push({name: 'HomePage', params: {}});
+      },
       //首页模块
       homeButton() {
         this.changeButtonColor(0);

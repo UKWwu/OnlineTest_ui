@@ -362,11 +362,13 @@
             })
           }
         }).then(()=>{
-          this.findQuestionByPage();
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          setTimeout(()=>{
+            this.findQuestionByPage();
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          },200)
         }).catch(()=>{
           this.$message({
             type: 'info',
@@ -588,13 +590,14 @@
           arr.push(obj);
           this.addQuestion(obj);
         })
-        console.log(arr);
-        this.excelDialogVisible = false;
-        this.$message({
-          type: 'success',
-          message: '批量上传成功!'
-        });
-        this.findQuestionByPage();
+        setTimeout(()=>{
+          this.excelDialogVisible = false;
+          this.$message({
+            type: 'success',
+            message: '批量上传成功!'
+          });
+          this.findQuestionByPage();
+        },200)
       },
       // 按照二进制读取文件
       readFile(file) {

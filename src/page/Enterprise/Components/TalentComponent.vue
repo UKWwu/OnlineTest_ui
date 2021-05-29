@@ -5,7 +5,8 @@
         <button class="leftButton" style="background-color: #202897;color: white" @click="open">新增考生</button>
         <button class="leftButton" style="background-color: #F4B335;" @click="downExcel">模板下载</button>
         <button class="leftButton" style="border-color: white;" @click="excelDialogVisible = true">批量上传</button>
-        <button class="leftButton" style="background-color: red;border-color: white;" @click="deleteTalentList">批量删除</button>
+        <button class="leftButton" style="background-color: red;border-color: white;" @click="deleteTalentList">批量删除
+        </button>
       </div>
     </div>
     <div class="right">
@@ -144,7 +145,7 @@
               <el-form-item label="联系电话" prop="telphone">
                 <el-input v-model="talent.telphone" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
-              <el-form-item label="电子邮箱" prop="email" >
+              <el-form-item label="电子邮箱" prop="email">
                 <el-input v-model="talent.email" :readonly="readonly ? 'readonly':false"></el-input>
               </el-form-item>
               <el-form-item label="备注" prop="remark">
@@ -234,13 +235,54 @@
             {required: true, message: '请输入候选人院校', trigger: 'blur'}
           ],
           cardId: [
-            {required: true, message: '请输入身份证号码', trigger: 'blur'}
+            {
+              required: true, validator: (rule, value, callback) => {
+                const IDCardReg = /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[0-2])(([0-2][1-9])|10|20|30|31)\d{3}(\d|X|x)$/
+                // const sfzhReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+                if (value) {
+                  if (IDCardReg.test(value)) {
+                    callback()
+                  } else {
+                    callback(new Error('身份证号格式不正确'))
+                  }
+                } else {
+                  callback(new Error('请输入身份证号'))
+                }
+              }, message: '请输入身份证号码', trigger: 'blur'
+            }
           ],
           telphone: [
-            {required: true, message: '正确的手机号', trigger: 'blur'}
+            {
+              required: true, validator: (rule, value, callback) => {
+                if (!value) {
+                  callback(new Error('请输入联系方式'))
+                } else {
+                  const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/
+                  if (reg.test(value)) {
+                    callback()
+                  } else {
+                    return callback(new Error('请输入正确的电话'))
+                  }
+                }
+              }, message: '正确的手机号', trigger: 'blur'
+            }
           ],
           email: [
-            {required: true, message: '正确的手机号', trigger: 'blur'}
+            {
+              required: true, validator: (rule, value, callback) => {
+                const mal = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+                if (rule.required && !value) {
+                  return callback(new Error('不能为空'))
+                }
+                if (value) {
+                  if (!(mal.test(value))) {
+                    callback(new Error('请输入正确邮箱'))
+                  } else {
+                    callback()
+                  }
+                }
+              }, message: '正确的手机号', trigger: 'blur'
+            }
           ],
         },
         updateRules: {
@@ -257,21 +299,62 @@
             {required: true, message: '请输入候选人院校', trigger: 'blur'}
           ],
           cardId: [
-            {required: true, message: '请输入身份证号码', trigger: 'blur'}
+            {
+              required: true, validator: (rule, value, callback) => {
+                const IDCardReg = /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[0-2])(([0-2][1-9])|10|20|30|31)\d{3}(\d|X|x)$/
+                // const sfzhReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+                if (value) {
+                  if (IDCardReg.test(value)) {
+                    callback()
+                  } else {
+                    callback(new Error('身份证号格式不正确'))
+                  }
+                } else {
+                  callback(new Error('请输入身份证号'))
+                }
+              }, trigger: 'blur'
+            }
           ],
           telphone: [
-            {required: true, message: '正确的手机号', trigger: 'blur'}
+            {
+              required: true, validator: (rule, value, callback) => {
+                if (!value) {
+                  callback(new Error('请输入联系方式'))
+                } else {
+                  const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/
+                  if (reg.test(value)) {
+                    callback()
+                  } else {
+                    return callback(new Error('请输入正确的电话'))
+                  }
+                }
+              }, trigger: 'blur'
+            }
           ],
           email: [
-            {required: true, message: '正确的手机号', trigger: 'blur'}
+            {
+              required: true, validator: (rule, value, callback) => {
+                const mal = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+                if (rule.required && !value) {
+                  return callback(new Error('不能为空'))
+                }
+                if (value) {
+                  if (!(mal.test(value))) {
+                    callback(new Error('请输入正确邮箱'))
+                  } else {
+                    callback()
+                  }
+                }
+              }, trigger: 'blur'
+            }
           ],
         },
         readonly: false,
         talent: {
-          userName:""
+          userName: ""
         },
-        talentForm:false,
-        talentList:[]
+        talentForm: false,
+        talentList: []
       }
     },
     mounted() {
@@ -284,13 +367,13 @@
       handleSelectionChange(val) {
         this.talentList = val;
       },
-      deleteTalentList(){
+      deleteTalentList() {
         this.$confirm('此操作将永久删除, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          for(let i=0;i<this.talentList.length;i++){
+          for (let i = 0; i < this.talentList.length; i++) {
             let re = {targetID: this.talentList[i].id};
             this.$axios.post(
               'http://localhost:8081/EnterpriseTalent/deleteTalent', re)
@@ -303,13 +386,15 @@
               console.log(err)
             })
           }
-        }).then(()=>{
-          this.findAllTalent();
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(()=>{
+        }).then(() => {
+          setTimeout(() => {
+            this.findAllTalent();
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          }, 200)
+        }).catch(() => {
           this.$message({
             type: 'info',
             message: '取消删除!'
@@ -357,12 +442,14 @@
             console.log(err)
           })
         })
-        this.excelDialogVisible = false;
-        this.$message({
-          type: 'success',
-          message: '批量上传成功!'
-        });
-        this.findAllTalent();
+        setTimeout(() => {
+          this.excelDialogVisible = false;
+          this.$message({
+            type: 'success',
+            message: '批量上传成功!'
+          });
+          this.findAllTalent();
+        }, 200)
       },
       // 按照二进制读取文件
       readFile(file) {
@@ -459,7 +546,7 @@
         this.$router.push({name: 'HomePage', params: {}});
       },
       addTalent(talent) {
-        if(talent == undefined){
+        if (talent == undefined) {
           talent = this.talent;
         }
         talent.userName = coo.getCookie("userName");
@@ -478,7 +565,7 @@
           console.log(err)
         })
       },
-      updateTalent(){
+      updateTalent() {
         this.talent.userName = coo.getCookie("userName");
         this.$axios.post(
           'http://localhost:8081/EnterpriseTalent/updateTalent', this.talent)
@@ -498,7 +585,7 @@
 
       //form页面操作
       goback() {
-        this.talentForm  = false;
+        this.talentForm = false;
         this.talent = {};
       }
     }
